@@ -1,0 +1,17 @@
+dimension,check,status,status_flag
+Completeness,Missing values in sales dataset,PASS,1
+Completeness,Missing values in supporting datasets,REVIEW,0
+Validity,Negative sales,PASS,1
+Validity,Negative promotion counts,PASS,1
+Validity,Negative transactions,PASS,1
+Uniqueness,Duplicate sales grain,PASS,1
+Uniqueness,Duplicate sales IDs,PASS,1
+Uniqueness,Duplicate transaction grain,PASS,1
+Referential Integrity,Sales → Store master,PASS,1
+Referential Integrity,Transactions → Store master,PASS,1
+Temporal Integrity,Sales calendar continuity,REVIEW,0
+Cross-Dataset Integrity,Sales vs Transactions dates,REVIEW,0
+Cross-Dataset Integrity,Holiday date multiplicity,REVIEW,0
+Business Rule,onpromotion values,PASS,1
+Business Rule,Oil price values,REVIEW,0
+Business Rule,Sales grain,PASS,1
