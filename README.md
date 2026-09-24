@@ -200,6 +200,65 @@ MAPE will be treated carefully because percentage-based error can become mislead
 
 ---
 
+## Dataset Profile
+
+The project currently uses the public Corporación Favorita Store Sales
+Time Series Forecasting dataset.
+
+### Main Sales Dataset
+
+| Attribute | Result |
+|---|---:|
+| Sales records | 3,000,888 |
+| Date range | 2013-01-01 to 2017-08-15 |
+| Unique sales dates | 1,684 |
+| Stores | 54 |
+| Product families | 33 |
+| Duplicate Date × Store × Family records | 0 |
+| Duplicate IDs | 0 |
+| Missing values in train | 0 |
+| Negative sales records | 0 |
+| Zero-sales records | 939,130 |
+
+### Supporting Datasets
+
+| Dataset | Records | Key Grain |
+|---|---:|---|
+| Transactions | 83,488 | Date × Store |
+| Stores | 54 | Store |
+| Holidays & Events | 350 | Event record |
+| Oil Prices | 1,218 | Date |
+| Test | 28,512 | Forecast submission record |
+
+### Confirmed Sales Grain
+
+The confirmed business grain of the main sales dataset is:
+
+**Date × Store × Product Family**
+
+Each combination has one sales record.
+
+### Initial Data Quality Findings
+
+The initial profiling identified:
+
+- No missing values in the main sales dataset.
+- No duplicate sales records at the confirmed business grain.
+- No duplicate sales IDs.
+- No negative sales values.
+- Store referential integrity passed between sales and store master.
+- Store referential integrity passed between transactions and store master.
+- Transaction Date × Store duplicate check passed.
+- Holiday data contains multiple records on some dates and therefore requires
+  controlled joining.
+- Four sales calendar dates are absent from the sales dataset; all four are
+  December 25 national Christmas holidays.
+- Two sales dates have no transaction records: 2016-01-01 and 2016-01-03.
+- The oil dataset contains 43 missing price observations.
+- `onpromotion` behaves as a promotion count rather than a binary indicator.
+- Raw date fields are currently loaded as strings and will be standardized
+  during data preparation.
+
 ## Data Quality & Governance
 
 Data quality will be evaluated before forecasting.
@@ -353,9 +412,14 @@ Completed:
 - Remote repository synchronization
 
 
-### Phase 2 — Data Acquisition & Profiling
+### Phase 2(A) — Data Acquisition & Initial Profiling
+
+**Status: Complete**
+
+### Phase 2(B) — Overall Data Quality Assessment
 
 **Status: Next**
+
 
 ### Phase 3 — Data Quality & Preparation
 
