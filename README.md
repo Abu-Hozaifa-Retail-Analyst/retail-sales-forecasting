@@ -51,10 +51,30 @@ This project addresses that problem by building a structured and reproducible re
 
 The initial forecasting objective is:
 
-> **Forecast monthly Net Sales for the next 3–6 months.**
+> **Forecast monthly retail sales for the next 3–6 months.**
 
-The final forecast grain and horizon will be confirmed after inspecting the available dataset and validating its time coverage, completeness, and business suitability.
+The source dataset field `sales` will be used as the forecasting target.
 
+The project will refer to this target as **Sales** rather than **Net Sales** because the source data profile does not establish that the `sales` field represents net sales.
+
+### Forecasting Grain
+
+The initial forecasting grain is:
+
+**Month × Total Retail Business**
+
+Daily Store × Product Family sales will be aggregated to monthly total sales before forecasting.
+
+The final forecast horizon and methodology will be confirmed after data preparation, exploratory analysis, and time-series validation.
+
+This initial monthly total-business forecast is intended to support:
+
+- Sales planning
+- Commercial planning
+- Inventory planning
+- Purchasing and replenishment
+- Budgeting
+- Management reporting
 ---
 
 ## Business Questions
@@ -204,6 +224,32 @@ MAPE will be treated carefully because percentage-based error can become mislead
 
 The project currently uses the public Corporación Favorita Store Sales
 Time Series Forecasting dataset.
+
+## Forecasting Target and Grain
+
+The initial forecasting target is the source dataset's `sales` field.
+
+The target is intentionally referred to as **Sales**, not **Net Sales**, because
+the available source data definition does not establish that `sales` represents
+net sales.
+
+### Initial Forecasting Grain
+
+**Month × Total Retail Business**
+
+The source data is stored at:
+
+**Date × Store × Product Family**
+
+and will be aggregated to monthly total-business sales before the initial
+forecasting model is developed.
+
+### Preparation Principle
+
+Raw source files will remain unchanged.
+
+Cleaning, transformation, feature engineering, aggregation, and forecasting
+datasets will be created separately from the raw source data.
 
 ### Main Sales Dataset
 
@@ -451,7 +497,7 @@ analysis or forecasting.
 
 ### Phase 3 — Data Quality & Preparation
 
-**Status: Next**
+**Status: In Progress**
 
 ### Phase 4 — Retail Exploratory Analysis
 
