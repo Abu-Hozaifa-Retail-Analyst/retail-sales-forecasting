@@ -328,6 +328,16 @@ Data definitions and validation rules will be documented so that analytical resu
 
 ---
 
+### Controlled Working Data Layer
+
+The project follows a raw-versus-processed data governance approach.
+
+- `data/raw/` contains the original source datasets and is treated as read-only.
+- `data/processed/` contains controlled working copies used for cleaning and transformation.
+- Raw source files are never modified directly.
+- Dataset preparation is performed through reproducible Python scripts.
+- The initial working-copy creation is verified using file integrity checks.
+
 ## Project Workflow
 
 The project follows this overall workflow:
@@ -497,7 +507,9 @@ analysis or forecasting.
 
 ### Phase 3 — Data Quality & Preparation
 
-**Status: In Progress**
+**Phase 3: In Progress**
+**Phase 3.1: Forecasting target and grain defined**
+**Phase 3.2: Controlled working datasets created without modifying raw source files**
 
 ### Phase 4 — Retail Exploratory Analysis
 
