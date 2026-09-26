@@ -510,6 +510,67 @@ analysis or forecasting.
 **Phase 3: In Progress**
 **Phase 3.1: Forecasting target and grain defined**
 **Phase 3.2: Controlled working datasets created without modifying raw source files**
+**Phase 3.3: Data standardization completed and validated**
+
+### Phase 3.3 — Data Standardization
+
+**Status: Complete**
+
+The controlled working datasets were standardized using reusable Python
+functions in `src/retail_forecasting/preparation/cleaning.py`.
+
+Standardization covered:
+
+- Date conversion to datetime
+- Numeric identifier types
+- Numeric measure types
+- Transaction and promotion counts
+- Categorical text fields
+- Holiday transfer indicators
+
+The following standardized datasets were created:
+
+- `data/processed/train_standardized.csv`
+- `data/processed/transactions_standardized.csv`
+- `data/processed/stores_standardized.csv`
+- `data/processed/holidays_events_standardized.csv`
+- `data/processed/oil_standardized.csv`
+
+### Standardization Validation
+
+The standardization process was validated before the datasets were saved.
+
+**In-memory validation**
+
+- 19 checks
+- 19 PASS
+- 0 FAIL
+
+**Saved-file structural validation**
+
+- 5 datasets checked
+- 5 PASS
+- 0 FAIL
+
+Validation confirmed preservation of:
+
+- Row counts
+- Missing-value patterns
+- Business values
+- Expected columns
+- Dataset structure
+
+The 43 missing oil-price observations remain unchanged and will be
+evaluated during later business-rule preparation.
+
+### Data Governance
+
+The project maintains separate data layers:
+
+`Raw Source → Working Copy → Standardized Data → Clean Analytical Data`
+
+Raw source files remain unchanged. No business-rule cleaning or imputation
+was performed during Phase 3.3.
 
 ### Phase 4 — Retail Exploratory Analysis
 
