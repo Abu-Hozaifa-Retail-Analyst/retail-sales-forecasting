@@ -572,6 +572,75 @@ The project maintains separate data layers:
 Raw source files remain unchanged. No business-rule cleaning or imputation
 was performed during Phase 3.3.
 
+### Phase 3.4.1 — Missing Oil-Price Investigation
+
+**Status: Complete — Investigation and treatment decision documented**
+
+The 43 missing oil-price observations were investigated before any
+imputation or deletion.
+
+Findings:
+
+* 43 missing observations
+* 43/43 occurred on weekdays
+* 23 occurred on Mondays
+* 9 occurred on Fridays
+* 7 occurred on Thursdays
+* 2 occurred on Tuesdays
+* 2 occurred on Wednesdays
+* 17 of the 43 dates appeared in the retail holiday/event calendar
+* 26 did not appear in the retail holiday/event calendar
+* The missing observations showed a structured calendar pattern rather
+  than an obviously random pattern
+* Only one consecutive missing-date sequence was identified:
+  2017-07-03 and 2017-07-04
+
+For missing dates with observed oil prices on both sides:
+
+* 9 had a 2-calendar-day gap between observed prices
+* 31 had a 4-calendar-day gap
+* 2 had a 5-calendar-day gap
+
+### Treatment Decision
+
+The 43 missing oil-price observations will remain missing in the
+standardized dataset.
+
+No automatic:
+
+* Zero replacement
+* Row deletion
+* Forward-fill
+* Linear interpolation
+
+was applied at the standardized-data layer.
+
+The reason is that oil price is an external economic variable and the
+missing observations show a systematic calendar/trading pattern.
+Creating synthetic daily oil prices before establishing their analytical
+purpose would introduce unnecessary assumptions.
+
+Any treatment required for an oil-derived forecasting feature will be
+handled separately during feature engineering and model preparation.
+
+The project will also evaluate whether oil price provides useful
+incremental forecasting information before making it a required model
+feature.
+
+### Data Governance
+
+The standardized dataset continues to preserve the source missingness.
+
+The project maintains a separation between:
+
+1. Source observations
+2. Standardized data
+3. Analytical features
+4. Model-specific transformations
+
+No source-derived values were overwritten during this investigation.
+
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
