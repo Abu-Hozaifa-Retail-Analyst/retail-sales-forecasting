@@ -677,6 +677,74 @@ workflow to distinguish legitimate business closures from missing
 operational data.
 
 
+### Phase 3.4.3 — Transaction-Date Coverage Investigation
+
+**Status: Complete — Transaction coverage limitation documented**
+
+The transaction dataset was compared with the sales calendar.
+
+Two sales dates had no transaction records:
+
+* 2016-01-01
+* 2016-01-03
+
+The sales dataset contained complete coverage on both dates:
+
+* 54 stores
+* 33 product families
+* 1,782 sales rows per date
+
+### 2016-01-01
+
+The date is documented in the holiday/event dataset as:
+
+**National Holiday — Primer dia del ano**
+
+Sales records remain valid and were not removed.
+
+The absence of transaction records is treated as a supporting transaction
+data gap with holiday context.
+
+### 2016-01-03
+
+The sales dataset contains complete coverage and total sales of
+1,226,735.72.
+
+No transaction records exist for the date, and no holiday/event record
+was identified.
+
+Transaction coverage around this period is also incomplete:
+
+* 2015-12-31: 53 stores
+* 2016-01-02: 36 stores
+* 2016-01-04: 14 stores
+* 2016-01-05: 53 stores
+
+This indicates a broader limitation in the transaction dataset around
+this period.
+
+### Treatment Decision
+
+Missing transaction records will not be replaced with zero and the
+corresponding sales records will not be removed.
+
+The project distinguishes between:
+
+* No transaction record
+* Observed zero transactions
+* Observed positive transactions
+
+The forecasting target remains **Sales**, so transaction data is not
+required to construct the target.
+
+Transactions may be evaluated later as an optional explanatory feature,
+but their coverage and usefulness must be validated before they are used
+for forecasting.
+
+This preserves the distinction between the authoritative sales target
+and supporting transaction data.
+
+
 ### Data Governance
 
 The standardized dataset continues to preserve the source missingness.
