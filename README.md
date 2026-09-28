@@ -627,6 +627,56 @@ The project will also evaluate whether oil price provides useful
 incremental forecasting information before making it a required model
 feature.
 
+### Phase 3.4.2 — Christmas Calendar Gap Investigation
+
+**Status: Complete — Expected calendar closure confirmed**
+
+The four missing sales dates identified during initial profiling were
+investigated:
+
+* 2013-12-25
+* 2014-12-25
+* 2015-12-25
+* 2016-12-25
+
+The investigation confirmed that these are complete business-wide gaps,
+not partial data-loss events.
+
+For all four dates:
+
+* Sales records = 0
+* Store coverage = 0
+* Product-family coverage = 0
+* Transaction records = 0
+* Holiday calendar classification = National Holiday
+* Holiday description = Navidad
+
+The surrounding dates contained the expected 54 stores and 33 product
+families, with 1,782 store-family observations per operating day.
+
+### Treatment Decision
+
+The Christmas gaps are classified as:
+
+**Expected Calendar Closure — Not a Data Quality Error**
+
+The standardized sales dataset will remain unchanged.
+
+No artificial sales records will be inserted and no sales values will be
+imputed for Christmas.
+
+Because the initial forecasting target is monthly total business sales,
+monthly aggregation will use the actual observed sales for operating days.
+
+If a complete daily analytical calendar is required later, Christmas can
+be represented explicitly as a business-closure/calendar event in a
+derived analytical dataset without modifying the standardized source data.
+
+This preserves source-data integrity while allowing the forecasting
+workflow to distinguish legitimate business closures from missing
+operational data.
+
+
 ### Data Governance
 
 The standardized dataset continues to preserve the source missingness.
