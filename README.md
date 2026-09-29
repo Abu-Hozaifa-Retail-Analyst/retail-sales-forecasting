@@ -744,6 +744,101 @@ for forecasting.
 This preserves the distinction between the authoritative sales target
 and supporting transaction data.
 
+## Step 3.4.4M — Holiday/Event Representation Decision
+
+### Investigation Result
+
+The holiday/event dataset contains 350 records across 312 unique dates.
+
+31 dates contain multiple holiday/event records:
+
+- 25 dates contain 2 records
+- 5 dates contain 3 records
+- 1 date contains 4 records
+
+No exact duplicate holiday/event rows were found.
+
+The multiplicity is legitimate and reflects combinations of:
+
+- Local holidays
+- Regional holidays
+- National holidays
+- Events
+- Additional holidays
+- Bridge days
+- Transfer days
+- Work days
+
+### Join-Risk Validation
+
+A hypothetical date-only join between the sales dataset and the
+multi-event holiday records demonstrated significant row multiplication.
+
+Sales observations on multi-event dates:
+
+42,768 rows
+
+Holiday records on those dates:
+
+69 records
+
+Rows after a date-only join:
+
+96,228 rows
+
+Sales before hypothetical join:
+
+19,442,379.03
+
+Sales after hypothetical join:
+
+42,372,171.03
+
+Difference:
+
+22,929,792.00
+
+Therefore, the holiday/event table must not be directly joined to sales
+using only the `date` field when calculating aggregated sales measures.
+
+### Final Representation Decision
+
+The standardized holiday/event detail dataset will remain at its original
+event-level grain:
+
+**Date × Holiday/Event Record**
+
+A separate derived analytical calendar will be created later at:
+
+**Date**
+
+The analytical calendar will contain aggregated date-level holiday/event
+features such as:
+
+- holiday/event presence indicators
+- national/local/regional indicators
+- counts by event type
+- holiday/event counts
+- controlled descriptive fields where useful
+
+This design preserves the original source detail while providing a safe
+one-row-per-date representation for analytical joins and forecasting
+features.
+
+### Governance Rule
+
+The raw and standardized holiday/event detail datasets will not be
+deduplicated or collapsed merely because multiple records share the same
+date.
+
+Any derived calendar representation must preserve the business meaning
+of the underlying records and must be validated for one-row-per-date
+uniqueness before being joined to sales.
+
+### Status
+
+**Phase 3.4.4 — Complete**
+
 
 ### Data Governance
 
