@@ -854,6 +854,28 @@ The project maintains a separation between:
 No source-derived values were overwritten during this investigation.
 
 
+
+### Phase 3.4.5 — Final Cross-Dataset Preparation Review
+
+**Status: Complete — 8 PASS / 0 FAIL**
+
+The cross-dataset review consolidated the four preparation findings identified during Phase 3.4:
+
+| Area | Finding | Treatment |
+|---|---|---|
+| Oil prices | 43 missing observations | Preserve missing values; evaluate treatment during feature engineering |
+| Sales calendar | 4 missing dates, all Christmas national holidays | Preserve source gaps; do not impute sales |
+| Transactions | 2 sales dates without transaction records: 2016-01-01 and 2016-01-03 | Preserve missing transaction coverage; do not assume zero |
+| Holiday/events | 31 dates contain multiple legitimate records | Preserve event-level detail; create a separate one-row-per-date analytical calendar later |
+
+The review reconfirmed that raw source data remains unchanged and that missing values are not automatically converted to zero or imputed.
+
+The holiday/event detail remains at **Date × Holiday/Event Record** grain because a date-only join can multiply sales rows and inflate aggregated sales. A controlled one-row-per-date analytical calendar will therefore be created later for safe date-level joins.
+
+Oil prices and transactions remain optional supporting features until their coverage and forecasting usefulness are validated.
+
+The project is now ready to move from cross-dataset review into controlled analytical preparation.
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
