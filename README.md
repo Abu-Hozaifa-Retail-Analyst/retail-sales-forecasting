@@ -876,6 +876,39 @@ Oil prices and transactions remain optional supporting features until their cove
 
 The project is now ready to move from cross-dataset review into controlled analytical preparation.
 
+### Phase 3.5.5 — Holiday/Event Merge QA — ✅ COMPLETE
+
+The analytical calendar was successfully validated after merging the aggregated holiday/event features.
+
+**Calendar validation:**
+
+* Calendar rows: 1,688
+* Unique dates: 1,688
+* Duplicate dates: 0
+* Date range: 2013-01-01 to 2017-08-15
+
+**Holiday/event validation:**
+
+* Source holiday/event records within the sales period: 286
+* Aggregated holiday/event records preserved: 286
+* Dates with one event record: 232
+* Dates with two event records: 19
+* Dates with three event records: 4
+* Dates with four event records: 1
+
+**Christmas closure validation:**
+
+* 2013-12-25: present in analytical calendar
+* 2014-12-25: present in analytical calendar
+* 2015-12-25: present in analytical calendar
+* 2016-12-25: present in analytical calendar
+* All four dates correctly identified as national holidays
+
+**QA result:** All holiday merge checks passed.
+
+The analytical calendar remains at one row per date, preventing holiday-event multiplicity from causing accidental row multiplication when calendar features are later joined to sales data.
+
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
