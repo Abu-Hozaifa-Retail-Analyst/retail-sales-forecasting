@@ -1059,6 +1059,68 @@ No outlier removal, winsorization, or Sales imputation was performed.
 
 The validated sales dataset is now ready for the next stage: controlled sales aggregation and forecasting-dataset preparation.
 
+### Phase 3.7 — Controlled Sales Aggregation — ✅ COMPLETE
+
+The validated daily Sales dataset was aggregated from Date × Store × Product Family to Month × Total Retail Business.
+
+#### Aggregation design
+
+| Attribute                    | Decision                      |
+| ---------------------------- | ----------------------------- |
+| Source grain                 | Date × Store × Product Family |
+| Target grain                 | Month × Total Retail Business |
+| Measure                      | Sales                         |
+| Aggregation                  | SUM                           |
+| Sales imputation             | Not performed                 |
+| Christmas closure imputation | Not performed                 |
+| Zero-sales observations      | Retained                      |
+
+#### Monthly dataset results
+
+| Metric                         |                   Result |
+| ------------------------------ | -----------------------: |
+| Total monthly periods          |                       56 |
+| Complete months                |                       55 |
+| Partial months                 |                        1 |
+| Complete-month date range      |   January 2013–July 2017 |
+| Partial period                 |        August 1–15, 2017 |
+| Source Sales total             |    1,073,644,952.2030684 |
+| Aggregated monthly Sales total |    1,073,644,952.2030685 |
+| Reconciliation difference      | Approximately 0.00000012 |
+| Sales reconciliation           |                     PASS |
+
+The small reconciliation difference is attributable to floating-point precision and is within the defined 0.01 tolerance.
+
+#### Monthly coverage treatment
+
+The four documented Christmas closure dates were retained as closures rather than imputed Sales observations.
+
+August 2017 was retained in the complete monthly reporting dataset but excluded from the initial full-month forecasting dataset because the source data ends on August 15, 2017.
+
+#### Output datasets
+
+* `data/processed/monthly_sales.csv` — all 56 monthly periods, including partial August 2017.
+* `data/processed/monthly_sales_complete.csv` — 55 complete monthly periods for initial forecasting.
+
+#### Quality assurance
+
+All seven monthly dataset QA checks passed:
+
+* Monthly period count
+* Month uniqueness
+* Continuous monthly sequence
+* Sales value integrity
+* Partial-month classification
+* Complete-month coverage
+* Sales control-total reconciliation
+
+Exported files were reloaded and validated successfully.
+
+**Phase 3.7 status: COMPLETE**
+
+The controlled monthly Sales datasets are ready for exploratory time-series analysis and forecasting preparation.
+
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
