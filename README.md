@@ -996,6 +996,68 @@ The exported analytical calendar passed all final validation checks:
 
 The validated analytical calendar is now ready to support downstream sales aggregation, feature engineering, exploratory analysis, forecasting, and Power BI modeling.
 
+### Phase 3.6 — Sales Data Grain & Coverage Validation — ✅ COMPLETE
+
+The source sales dataset was validated before aggregation to confirm that the Date × Store × Product Family grain was complete and suitable for downstream sales aggregation.
+
+#### Daily sales grain
+
+* Sales dates with records: 1,684
+* Stores: 54
+* Product families: 33
+* Expected rows per complete sales date: 1,782
+* Incomplete sales dates: 0
+
+Every date containing sales records has complete Store × Product Family coverage:
+
+**54 stores × 33 product families = 1,782 rows per sales date**
+
+#### Grain uniqueness
+
+The source sales grain was validated at:
+
+**Date × Store × Product Family**
+
+* Duplicate Date × Store × Family rows: 0
+* Expected total rows: 3,000,888
+* Actual total rows: 3,000,888
+* Row-count reconciliation: PASS
+
+The four previously identified Christmas closure dates remain absent from the sales dataset and are represented separately through the analytical calendar rather than being treated as incomplete operating days.
+
+#### Sales value integrity
+
+* Missing Sales values: 0
+* Negative Sales values: 0
+* Zero Sales values: 939,130
+* Total Sales before aggregation: 1,073,644,952.2030684
+
+Zero-sales observations were retained because zero sales can represent valid Store × Product Family observations.
+
+#### Extreme-value review
+
+Several high Sales observations were investigated in Store × Product Family context.
+
+The highest observations occur within complete Store × Product Family histories. No duplicate-grain or missing-coverage issue was identified.
+
+Extreme Sales values are therefore classified as **REVIEW**, not as confirmed data-quality errors.
+
+No outlier removal, winsorization, or Sales imputation was performed.
+
+#### Final Sales QA Gate
+
+| QA Check | Result |
+|---|---|
+| Daily coverage | PASS |
+| Grain uniqueness | PASS |
+| Row reconciliation | PASS |
+| Missing Sales values | PASS |
+| Negative Sales values | PASS |
+| Extreme values | REVIEW |
+
+**Overall Sales QA result: PASS**
+
+The validated sales dataset is now ready for the next stage: controlled sales aggregation and forecasting-dataset preparation.
 
 ### Phase 4 — Retail Exploratory Analysis
 
