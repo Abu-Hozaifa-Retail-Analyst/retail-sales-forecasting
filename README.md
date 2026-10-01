@@ -909,6 +909,94 @@ The analytical calendar was successfully validated after merging the aggregated 
 The analytical calendar remains at one row per date, preventing holiday-event multiplicity from causing accidental row multiplication when calendar features are later joined to sales data.
 
 
+### Phase 3.5 — Analytical Calendar — ✅ COMPLETE
+
+The project now includes a validated analytical calendar covering the complete sales analysis period from **2013-01-01 to 2017-08-15**.
+
+The analytical calendar provides a controlled **one-row-per-date** structure for combining calendar attributes, holiday/event information, sales coverage, transaction coverage, and documented sales closures without introducing duplicate dates or holiday-event join multiplication.
+
+#### Calendar scope
+
+* Calendar start date: 2013-01-01
+* Calendar end date: 2017-08-15
+* Calendar rows: 1,688
+* Calendar columns: 31
+* Unique dates: 1,688
+* Duplicate dates: 0
+* Missing dates: 0
+* Missing cells: 0
+
+#### Calendar features
+
+The analytical calendar contains:
+
+* Date attributes including year, quarter, month, week, day, day of week, and day name
+* Weekend indicator
+* Sequential time index (`days_from_start`)
+* Sales-record coverage indicator
+* Transaction-record coverage indicator
+* Holiday/event presence indicator
+* Holiday/event record count
+* National, regional, and local holiday indicators
+* Holiday, event, additional, bridge, transfer, and work-day indicators
+* Category-level holiday/event counts
+* Explicit sales-closure indicator
+
+#### Sales and transaction coverage
+
+The calendar was reconciled against the source sales and transaction datasets.
+
+* Dates with sales records: 1,684
+* Dates without sales records: 4
+* Dates with transaction records: 1,682
+* Dates without transaction records: 6
+
+The four missing sales dates were identified as the documented Christmas closure dates:
+
+* 2013-12-25
+* 2014-12-25
+* 2015-12-25
+* 2016-12-25
+
+These dates are represented explicitly using the `is_sales_closure` indicator rather than imputing sales values.
+
+The two additional transaction coverage gaps, **2016-01-01** and **2016-01-03**, remain represented as missing transaction coverage. No transaction values were imputed.
+
+#### Holiday and event aggregation
+
+Holiday/event records were aggregated from the detailed source data into a one-row-per-date structure before being merged into the analytical calendar.
+
+* Source holiday/event records within the sales period: 286
+* Aggregated records reconciled: 286
+* Dates with one event record: 232
+* Dates with two event records: 19
+* Dates with three event records: 4
+* Dates with four event records: 1
+
+The source holiday/event detail was not deduplicated. Instead, event counts and category indicators were created so that multiple events on the same date do not cause accidental row multiplication when calendar features are joined to sales data.
+
+#### Analytical calendar QA
+
+The exported analytical calendar passed all final validation checks:
+
+| QA Check                         | Result |
+| -------------------------------- | ------ |
+| Rows correct                     | PASS   |
+| Columns correct                  | PASS   |
+| Dates unique                     | PASS   |
+| No duplicate dates               | PASS   |
+| Date range correct               | PASS   |
+| No missing values                | PASS   |
+| Sales coverage correct           | PASS   |
+| Transaction coverage correct     | PASS   |
+| Sales closures correct           | PASS   |
+| Holiday/event records reconciled | PASS   |
+
+**Overall QA result: PASS**
+
+The validated analytical calendar is now ready to support downstream sales aggregation, feature engineering, exploratory analysis, forecasting, and Power BI modeling.
+
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
