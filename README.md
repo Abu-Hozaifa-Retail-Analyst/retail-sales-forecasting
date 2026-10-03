@@ -1120,6 +1120,80 @@ Exported files were reloaded and validated successfully.
 
 The controlled monthly Sales datasets are ready for exploratory time-series analysis and forecasting preparation.
 
+### Phase 3.8 — Monthly Sales Time-Series Exploration
+
+**Status: Completed**
+
+#### Analysis scope
+
+Exploratory analysis was conducted using 55 complete monthly Sales observations from January 2013 through July 2017.
+
+August 2017 was excluded from the primary time-series analysis because it contains only 15 observed days.
+
+#### Annual Sales trend
+
+| Year | Months Available | Annual Sales |     YoY Growth |
+| ---- | ---------------: | -----------: | -------------: |
+| 2013 |               12 |      140.42M |              — |
+| 2014 |               12 |      209.47M |        +49.18% |
+| 2015 |               12 |      240.88M |        +14.99% |
+| 2016 |               12 |      288.65M |        +19.83% |
+| 2017 |                7 |      181.78M | Not comparable |
+
+Annual growth was evaluated only for complete calendar years. The partial 2017 total was not interpreted as a full-year decline.
+
+#### Seasonal analysis
+
+Monthly Sales were examined using:
+
+* Average and median Sales by calendar month
+* Monthly seasonal index
+* Within-year normalized Sales index
+* Year-by-year seasonal consistency
+* Visual comparison of normalized monthly patterns
+
+#### Key exploratory findings
+
+* February was below its annual average in all five observed years.
+* December was above its annual average in all four observed years.
+* November was above its annual average in all four observed years.
+* September and October were generally elevated, with some variation.
+* January through August displayed more mixed seasonal behavior.
+
+The average normalized seasonal index was approximately:
+
+| Month     | Normalized Index |
+| --------- | ---------------: |
+| February  |            0.801 |
+| July      |            1.039 |
+| September |            1.061 |
+| October   |            1.091 |
+| November  |            1.098 |
+| December  |            1.334 |
+
+These are exploratory descriptive patterns, not confirmed causal effects or guaranteed future demand changes.
+
+#### Analytical limitations
+
+* Only four or five annual observations are available for each calendar month.
+* Seasonal effects may interact with the underlying growth trend.
+* Promotional activity, holidays, transactions, and other business drivers have not yet been fully investigated.
+* No forecasting model has been selected or evaluated at this stage.
+
+#### Outputs
+
+* Monthly Sales trend visualization
+* Annual Sales summary
+* Monthly seasonality summary
+* Normalized seasonal profile
+* Year-by-year seasonality comparison
+* Seasonal consistency table
+
+#### Readiness
+
+The exploratory analysis provides an initial understanding of trend and seasonal behavior for subsequent forecasting preparation and chronological model validation.
+
+
 
 ### Phase 4 — Retail Exploratory Analysis
 
