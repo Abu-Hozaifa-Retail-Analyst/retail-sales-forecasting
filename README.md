@@ -1193,6 +1193,74 @@ These are exploratory descriptive patterns, not confirmed causal effects or guar
 
 The exploratory analysis provides an initial understanding of trend and seasonal behavior for subsequent forecasting preparation and chronological model validation.
 
+### Phase 3.9 — Forecasting Readiness & Validation Design
+
+**Status: Initial validation design completed**
+
+#### Forecasting specification
+
+| Component                  | Design                        |
+| -------------------------- | ----------------------------- |
+| Forecast target            | Total Monthly Sales           |
+| Forecast grain             | Month × Total Retail Business |
+| Available complete history | January 2013 – July 2017      |
+| Complete observations      | 55                            |
+| Initial forecast horizon   | 3 months                      |
+| Validation method          | Chronological holdout         |
+| Initial baselines          | Naive and Seasonal Naive      |
+| Evaluation metrics         | MAE, RMSE, WAPE, Bias         |
+
+#### Initial training and validation split
+
+| Dataset    | Period                    | Observations |
+| ---------- | ------------------------- | -----------: |
+| Training   | January 2013 – April 2017 |           52 |
+| Validation | May 2017 – July 2017      |            3 |
+
+The final three complete months were reserved for initial out-of-sample evaluation.
+
+The training period ends before the validation period begins. No random shuffling was applied.
+
+#### Validation controls
+
+The following checks passed:
+
+* Training period is earlier than validation period.
+* Training observation count is correct.
+* Validation observation count is correct.
+* Forecast horizon is three months.
+* Training and validation periods do not overlap.
+* Both datasets are chronologically ordered.
+
+**Result: 6/6 validation-design checks passed.**
+
+#### Baseline methodology
+
+**Naive baseline:** Uses the last observed training Sales value as the forecast for each validation month.
+
+**Seasonal Naive baseline:** Uses the Sales value from the corresponding month 12 months earlier.
+
+Both baselines will be evaluated against the same validation observations.
+
+#### Forecast evaluation
+
+The planned evaluation metrics are:
+
+* MAE — Mean Absolute Error
+* RMSE — Root Mean Squared Error
+* WAPE — Weighted Absolute Percentage Error
+* Bias — Direction and magnitude of forecast error
+
+No forecast accuracy results have been established yet.
+
+#### Limitations and next steps
+
+The initial three-month holdout provides a first evaluation, but it does not establish performance across all possible forecast origins or business conditions.
+
+Subsequent evaluation may include rolling-origin validation, forecast error analysis, and comparison with additional forecasting approaches.
+
+The validation design was established before model fitting to reduce the risk of future-information leakage.
+
 
 
 ### Phase 4 — Retail Exploratory Analysis
