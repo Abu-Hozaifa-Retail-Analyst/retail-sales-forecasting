@@ -1261,6 +1261,25 @@ Subsequent evaluation may include rolling-origin validation, forecast error anal
 
 The validation design was established before model fitting to reduce the risk of future-information leakage.
 
+### Phase 3.10 — Baseline Forecasting and Evaluation
+
+Include:
+
+Forecast target and grain.
+
+Training period: January 2013–April 2017.
+
+Validation period: May–July 2017.
+
+Three-month horizon.
+
+Both baseline definitions.
+
+The four evaluation metrics and results.
+
+Initial finding and the three-observation limitation.
+
+Rolling-origin validation as the next methodological requirement.
 
 
 ### Phase 4 — Retail Exploratory Analysis
