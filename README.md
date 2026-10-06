@@ -1281,6 +1281,104 @@ Initial finding and the three-observation limitation.
 
 Rolling-origin validation as the next methodological requirement.
 
+## Phase 3.11 — Rolling-Origin Baseline Validation
+
+### Objective
+
+Evaluate whether the initial baseline forecasting results remain consistent
+across multiple historical forecast origins rather than relying only on the
+single May–July 2017 validation period.
+
+### Validation Design
+
+- Forecast target: Monthly Total Retail Sales
+- Forecast horizon: 3 months
+- Minimum training history: 36 months
+- Validation method: Rolling-origin chronological validation
+- Baseline models:
+  - Naive
+  - Seasonal Naive
+- Evaluation metrics:
+  - MAE
+  - RMSE
+  - WAPE
+  - Bias
+- Random train/test splitting was not used.
+- Future observations were not used to construct earlier forecasts.
+
+The rolling-origin procedure generated 17 chronological validation windows,
+with 3 forecast months per window, resulting in 51 out-of-sample forecast
+observations.
+
+### Rolling-Origin Results
+
+| Metric | Naive | Seasonal Naive |
+|---|---:|---:|
+| MAE | 2,178,014.34 | 3,210,528.38 |
+| RMSE | 2,735,640.76 | 4,529,398.49 |
+| WAPE | 8.80% | 12.98% |
+| Bias | -0.59% | -12.31% |
+
+### Baseline Comparison
+
+The Naive model produced lower aggregate MAE, RMSE, and WAPE than the
+Seasonal Naive model across the rolling-origin evaluation.
+
+The Naive model achieved the lower WAPE in 9 of 17 validation windows,
+while Seasonal Naive achieved the lower WAPE in 8 of 17 windows.
+
+This indicates that the Naive model was the stronger overall baseline,
+but its advantage was not consistent across every historical validation
+period.
+
+Seasonal Naive remains an important benchmark because it captures the
+same-month-prior-year seasonal pattern and outperformed Naive in several
+validation windows.
+
+### Bias Interpretation
+
+The Seasonal Naive model produced an overall Bias of -12.31%, indicating
+substantial systematic underforecasting across the rolling validation
+sample.
+
+The Naive model produced a much smaller overall Bias of -0.59%, indicating
+that its aggregate forecast level was considerably closer to actual sales.
+
+### Baseline Conclusion
+
+The Naive model is the stronger overall baseline among the two baseline
+methods evaluated.
+
+It will therefore be used as the primary benchmark for subsequent
+forecasting model comparisons.
+
+However, this does not mean that Naive is the final or best forecasting
+model. Any more advanced forecasting approach should demonstrate
+out-of-sample improvement over this benchmark using the same chronological
+validation framework and evaluation metrics.
+
+### Methodological Limitation
+
+Rolling-origin validation provides stronger evidence than a single
+holdout period, but the validation windows overlap and therefore should
+not be interpreted as independent observations.
+
+The evaluation also covers a relatively limited monthly history.
+Forecast performance may vary across different seasonal and business
+conditions.
+
+Further analysis is required to investigate seasonality, promotions,
+calendar effects, and other retail drivers before selecting a
+production-oriented forecasting approach.
+
+### Next Step
+
+**Phase 3.12 — Baseline Forecast Error Pattern Analysis**
+
+The next phase will investigate where baseline forecasts perform well or
+poorly, including error magnitude, forecast direction, calendar-month
+patterns, and periods where Seasonal Naive outperformed Naive.
+
 
 ### Phase 4 — Retail Exploratory Analysis
 
