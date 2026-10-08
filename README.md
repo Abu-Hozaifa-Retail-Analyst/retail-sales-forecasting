@@ -1371,13 +1371,155 @@ Further analysis is required to investigate seasonality, promotions,
 calendar effects, and other retail drivers before selecting a
 production-oriented forecasting approach.
 
+## Phase 3.12 — Baseline Forecast Error Pattern Analysis
+
+### Objective
+
+Analyze the behavior of the Naive and Seasonal Naive baseline forecasts
+beyond aggregate performance metrics.
+
+The analysis examined:
+
+- largest absolute forecast errors
+- underforecasting and overforecasting direction
+- error patterns by calendar month
+- validation windows where Seasonal Naive outperformed Naive
+- model win magnitude across validation windows
+
+No causal explanation was assigned to an observed error pattern without
+supporting evidence.
+
+### 3.12.1 Largest Forecast Errors
+
+The largest Naive absolute forecast error occurred for December 2016:
+
+- Actual Sales: approximately 29.64M
+- Naive Forecast: approximately 22.42M
+- Error: approximately -7.22M
+- Direction: Underforecast
+
+The largest Seasonal Naive absolute forecast error occurred for April 2016:
+
+- Actual Sales: approximately 25.96M
+- Seasonal Naive Forecast: approximately 14.96M
+- Error: approximately -11.01M
+- Direction: Underforecast
+
+Several of the largest Seasonal Naive errors were concentrated in the
+early part of the 2016 validation history.
+
+### 3.12.2 Forecast Direction
+
+| Model | Underforecast | Overforecast | Exact |
+|---|---:|---:|---:|
+| Naive | 27 | 24 | 0 |
+| Seasonal Naive | 42 | 9 | 0 |
+
+The Naive model showed a relatively balanced forecast direction, consistent
+with its overall Bias of -0.59%.
+
+The Seasonal Naive model showed a strong systematic underforecasting
+tendency, with 42 of 51 forecast instances below actual Sales. This is
+consistent with its overall Bias of -12.31%.
+
+### 3.12.3 Calendar-Month Error Patterns
+
+Mean absolute error varied substantially across calendar months.
+
+For the Naive model:
+
+- December had the highest mean absolute error at approximately 5.94M.
+- February had the second-highest at approximately 3.64M.
+- September had the lowest at approximately 0.43M.
+
+For the Seasonal Naive model:
+
+- March had the highest mean absolute error at approximately 5.55M.
+- April was approximately 5.54M.
+- May was approximately 4.59M.
+- October had the lowest at approximately 0.15M.
+
+These results indicate that forecast error magnitude was not uniform across
+calendar months.
+
+Because rolling-origin validation windows overlap, calendar-month results
+represent forecast instances rather than independent observations.
+
+### 3.12.4 Seasonal Naive Winning Windows
+
+Seasonal Naive achieved lower WAPE than Naive in 8 of the 17 rolling
+validation windows.
+
+The Seasonal Naive model was particularly competitive during several
+validation periods from mid-2016 through early 2017.
+
+This demonstrates that although Seasonal Naive was weaker overall, the
+prior-year seasonal reference provided useful predictive information in
+some historical periods.
+
+### 3.12.5 Window-Level Model Comparison
+
+Across the 17 rolling validation windows:
+
+- Naive achieved the lower WAPE in 9 windows.
+- Seasonal Naive achieved the lower WAPE in 8 windows.
+
+Therefore, the relative performance of the two baseline methods varied
+across validation periods.
+
+The results demonstrate why model evaluation should not rely only on a
+single aggregate metric or a single holdout period.
+
+### 3.12.6 Win Magnitude
+
+The strongest Naive advantages occurred in the early rolling validation
+windows.
+
+The largest WAPE advantages were:
+
+| Window | Naive WAPE | Seasonal Naive WAPE | Naive Advantage |
+|---:|---:|---:|---:|
+| 2 | 6.84% | 37.65% | 30.80 percentage points |
+| 3 | 10.87% | 34.64% | 23.77 percentage points |
+| 4 | 7.40% | 25.57% | 18.16 percentage points |
+| 1 | 18.35% | 35.94% | 17.59 percentage points |
+
+These results show that the Naive model's advantage was particularly large
+during several early validation periods.
+
+### Overall Error Pattern Assessment
+
+The rolling-origin error analysis shows that:
+
+1. Naive is the stronger overall baseline.
+2. Naive forecast direction was relatively balanced.
+3. Seasonal Naive showed substantial systematic underforecasting.
+4. Forecast error magnitude varied across calendar months.
+5. Seasonal information provided predictive value in several validation
+   windows despite weaker aggregate performance.
+6. The relative performance of the baselines changed across historical
+   validation periods.
+
+These findings support investigating models that can account for both recent
+sales levels and relevant seasonal/calendar effects.
+
+However, the observed patterns are descriptive. They do not by themselves
+establish causal relationships between forecast errors and specific retail
+drivers such as promotions, holidays, or other business factors.
+
+### Methodological Note
+
+The May–July 2017 period was used as the initial validation holdout and is
+also represented by the final rolling-origin validation window. Therefore,
+it should not be described as a completely untouched final test set.
+
+Future model comparisons should continue using chronological validation and
+the same evaluation framework.
+
 ### Next Step
 
-**Phase 3.12 — Baseline Forecast Error Pattern Analysis**
-
-The next phase will investigate where baseline forecasts perform well or
-poorly, including error magnitude, forecast direction, calendar-month
-patterns, and periods where Seasonal Naive outperformed Naive.
+Proceed to the next forecasting stage after completing the baseline
+error-pattern analysis and Git synchronization.
 
 
 ### Phase 4 — Retail Exploratory Analysis
