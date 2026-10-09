@@ -1521,6 +1521,64 @@ the same evaluation framework.
 Proceed to the next forecasting stage after completing the baseline
 error-pattern analysis and Git synchronization.
 
+## Phase 3.13.2 — Blended Baseline Evaluation
+
+### Objective
+
+Test whether combining the Naive and Seasonal Naive forecasts improves
+monthly Sales forecast accuracy.
+
+### Method
+
+A fixed 50/50 blend was evaluated using the same 17 rolling-origin windows
+and 51 forecast instances as the existing baseline models.
+
+Blended Forecast = 0.5 × Naive Forecast
+                 + 0.5 × Seasonal Naive Forecast
+
+### Aggregate Results
+
+| Model | MAE | RMSE | WAPE | Bias |
+|---|---:|---:|---:|---:|
+| Naive | 2.18M | 2.74M | 8.80% | -0.59% |
+| Seasonal Naive | 3.21M | 4.53M | 12.98% | -12.31% |
+| 50/50 Blended | 2.07M | 2.74M | 8.36% | -6.45% |
+
+### Rolling-Window Results
+
+The blend achieved lower WAPE than Naive in 12 of 17 windows and higher
+WAPE in 5 windows.
+
+Mean window-level WAPE was 8.33% for the blend and 8.78% for Naive.
+This is an unweighted average of window-level WAPE values and differs from
+pooled WAPE.
+
+The blend's performance varied considerably across windows. It improved
+accuracy in several periods but performed substantially worse than Naive
+in Windows 2, 3, and 4.
+
+### Interpretation
+
+The 50/50 blend reduced aggregate MAE by approximately 5.1% and pooled
+WAPE by 0.44 percentage points compared with Naive.
+
+However, RMSE was slightly higher, and Bias moved from -0.59% to -6.45%.
+The blend therefore reduced typical absolute error while increasing the
+overall underforecasting tendency.
+
+### Decision
+
+Retain Naive as the primary baseline and the 50/50 blend as an alternative
+candidate. Do not declare the blend the overall winner based on WAPE alone.
+
+The current results are model-development evidence, not independent final
+test results. The rolling windows overlap, and the models have already
+been compared on these periods.
+
+### Next Step
+
+Proceed to ETS model development and evaluate it using the same
+chronological validation framework.
 
 ### Phase 4 — Retail Exploratory Analysis
 
