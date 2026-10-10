@@ -1580,6 +1580,56 @@ been compared on these periods.
 Proceed to ETS model development and evaluate it using the same
 chronological validation framework.
 
+### Phase 3.13.3 — Additive ETS Forecast Evaluation
+
+**Objective:** Evaluate Holt-Winters Exponential Smoothing (ETS) against the Naive, Seasonal Naive, and 50/50 blended baselines using the established rolling-origin validation protocol.
+
+**Model configuration**
+- Additive trend
+- Additive seasonality
+- Seasonal period: 12 months
+- Estimated initialization
+- Optimized model parameters
+- Forecast horizon: 3 months
+- Minimum training history: 36 monthly observations
+
+**Validation design**
+- 17 chronological rolling-origin windows
+- 51 forecast instances across the evaluation
+- Each model uses only observations available before its forecast origin
+- Forecast errors calculated as forecast minus actual Sales
+- Evaluation metrics: MAE, RMSE, WAPE, and Bias
+
+**Pooled rolling-origin results**
+
+| Model | MAE | RMSE | WAPE | Bias |
+|---|---:|---:|---:|---:|
+| Naive | 2,178,014.34 | 2,735,640.76 | 8.80% | -0.59% |
+| Seasonal Naive | 3,210,528.38 | 4,529,398.49 | 12.98% | -12.31% |
+| 50/50 Blended | 2,067,404.61 | 2,737,131.72 | 8.36% | -6.45% |
+| Additive ETS | 2,098,242.04 | 2,542,024.93 | 8.48% | +0.96% |
+
+**Window-level findings**
+- ETS achieved lower WAPE than Naive in 7 of 17 windows.
+- ETS achieved lower WAPE than the 50/50 blend in 12 of 17 windows.
+- Mean window WAPE was 8.69% for ETS, 8.78% for Naive, and 8.33% for the blend.
+- All 17 windows were present, with zero missing values in the window comparison and finite ETS WAPE values.
+
+**Interpretation**
+
+The 50/50 blend delivered the lowest pooled MAE and WAPE. ETS delivered the lowest pooled RMSE and Bias closest to zero. Its window-level performance varied, and it did not consistently outperform the Naive baseline.
+
+The results support retaining both the blend and ETS as candidate forecasting methods while preserving Naive as a simple benchmark. Model selection should consider multiple error metrics, performance across forecast origins, business costs, and the operational consequences of overforecasting and underforecasting.
+
+**Limitations**
+- Rolling windows overlap, so the 51 forecast instances are not independent observations.
+- The May–July 2017 period also appears in the final rolling window and is not an untouched final test set.
+- The results establish comparative performance only for the tested data, horizon, and model configurations; they do not guarantee future performance.
+- Error patterns are descriptive and do not establish causal effects from promotions, holidays, or other retail drivers.
+
+**Status:** Additive ETS rolling-origin evaluation completed; documentation and Git synchronization pending.
+
+
 ### Phase 4 — Retail Exploratory Analysis
 
 **Status: Not Started**
