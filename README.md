@@ -1629,6 +1629,54 @@ The results support retaining both the blend and ETS as candidate forecasting me
 
 **Status:** Additive ETS rolling-origin evaluation completed; documentation and Git synchronization pending.
 
+### Phase 3.13.4 — Damped-Trend ETS Evaluation
+
+**Objective:** Evaluate whether damping the additive ETS trend improves three-month retail Sales forecasts compared with the existing additive ETS model and baseline approaches.
+
+**Model configuration**
+- Additive trend with `damped_trend=True`
+- Additive seasonality
+- Seasonal period: 12 months
+- Estimated initialization and optimized parameters
+- Forecast horizon: 3 months
+- Minimum training history: 36 monthly observations
+
+**Validation design**
+- 17 chronological rolling-origin windows
+- 51 forecast instances
+- Forecasts generated using only data available before each validation window
+- Error convention: forecast minus actual Sales
+- Metrics: MAE, RMSE, WAPE, and Bias
+
+**Pooled rolling-origin results**
+
+| Model | MAE | RMSE | WAPE | Bias |
+|---|---:|---:|---:|---:|
+| Naive | 2,178,014.34 | 2,735,640.76 | 8.80% | -0.59% |
+| Seasonal Naive | 3,210,528.38 | 4,529,398.49 | 12.98% | -12.31% |
+| 50/50 Blended | 2,067,404.61 | 2,737,131.72 | 8.36% | -6.45% |
+| ETS Additive | 2,098,242.04 | 2,542,024.93 | 8.48% | +0.96% |
+| ETS Damped Trend | 2,118,859.66 | 2,549,228.14 | 8.56% | +0.30% |
+
+**Window-level results**
+- Damped ETS achieved lower WAPE than additive ETS in 8 of 17 windows.
+- Damped ETS achieved lower WAPE than the 50/50 blend in 9 of 17 windows.
+- Mean window WAPE: damped ETS 8.78%, additive ETS 8.69%, and blended baseline 8.33%.
+- QA confirmed 17 windows, 51 forecasts, no missing forecasts or actuals, finite nonnegative forecasts, reconciled errors, and three forecasts per window.
+- Window-level comparison QA confirmed zero missing values and all 17 windows present.
+
+**Interpretation**
+
+Damping the trend moved aggregate Bias closer to zero, from +0.96% for additive ETS to +0.30%. However, MAE and WAPE increased slightly, and RMSE also increased slightly. Damped ETS did not consistently outperform additive ETS across rolling windows.
+
+The 50/50 blend retained the lowest pooled MAE and WAPE, while additive ETS retained the lowest pooled RMSE. Damped ETS is retained as an evaluated alternative rather than the leading model.
+
+**Limitations**
+- Rolling windows overlap; the 51 forecast instances are not independent observations.
+- The May–July 2017 validation period overlaps with the final rolling window and is not an untouched test set.
+- Results apply to the evaluated series, three-month horizon, and tested model configurations; they do not guarantee future performance.
+
+**Status:** Damped-trend ETS evaluation completed. Documentation and Git synchronization pending.
 
 ### Phase 4 — Retail Exploratory Analysis
 
