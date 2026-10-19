@@ -1769,3 +1769,35 @@ Each major checkpoint will include appropriate documentation updates.
 This project is intended for portfolio, learning, and analytical demonstration purposes.
 
 Forecasts are analytical estimates and should be interpreted together with business knowledge, operational constraints, promotions, inventory availability, market conditions, and other relevant information.
+
+### Retail Driver Analysis — Product Family Sales Contribution
+
+**Status:** Completed — initial product-family contribution analysis.
+
+**Analysis period:** January 2013 through July 2017 (55 complete months).
+
+**Source:** `data/processed/train_standardized.csv`
+
+**Reproducible script:** `scripts/retail_driver_analysis/product_family_sales_contribution.py`
+
+**Generated report:** `reports/retail_driver_analysis/product_family_sales_contribution.csv`
+
+#### Validated findings
+
+- Total sales: 1,061,211,629.26.
+- Product families analyzed: 33.
+- Top three families (GROCERY I, BEVERAGES, PRODUCE): 63.58% of total sales.
+- Top five families: 78.69% of total sales.
+- Top six families: 82.62% of total sales.
+- Sales contribution percentages sum to 100%.
+
+#### Business interpretation
+
+Sales are concentrated in a relatively small number of product families. This supports prioritizing high-sales families for further forecasting evaluation and inventory-planning analysis.
+
+Sales contribution does not establish profitability, promotion effectiveness, or causality.
+
+#### Reproduce the analysis
+
+```powershell
+python .\scripts\retail_driver_analysis\product_family_sales_contribution.py
