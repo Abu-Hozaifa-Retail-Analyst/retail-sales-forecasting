@@ -1627,7 +1627,7 @@ The results support retaining both the blend and ETS as candidate forecasting me
 - The results establish comparative performance only for the tested data, horizon, and model configurations; they do not guarantee future performance.
 - Error patterns are descriptive and do not establish causal effects from promotions, holidays, or other retail drivers.
 
-**Status:** Additive ETS rolling-origin evaluation and documentation completed; Git synchronization pending.
+**Status:** Additive ETS rolling-origin evaluation, documentation, and Git synchronization completed.
 
 ### Phase 3.13.4 — Damped-Trend ETS Evaluation
 
@@ -1676,7 +1676,7 @@ The 50/50 blend retained the lowest pooled MAE and WAPE, while additive ETS reta
 - The May–July 2017 validation period overlaps with the final rolling window and is not an untouched test set.
 - Results apply to the evaluated series, three-month horizon, and tested model configurations; they do not guarantee future performance.
 
-**Status:** Damped-trend ETS evaluation and documentation completed; Git synchronization pending.
+**Status:** Damped-trend ETS evaluation, documentation, and Git synchronization completed.
 
 ### Phase 4 — Retail Exploratory Analysis
 
