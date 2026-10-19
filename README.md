@@ -1801,3 +1801,51 @@ Sales contribution does not establish profitability, promotion effectiveness, or
 
 ```powershell
 python .\scripts\retail_driver_analysis\product_family_sales_contribution.py
+
+### Retail Driver Analysis — Promotion Activity vs. Sales
+
+**Status:** Completed — descriptive promotion analysis and validation.
+
+**Notebook:** `notebooks/04_retail_driver_analysis/01_promotion_activity_vs_sales.ipynb`
+
+**Analysis period:** January 2013 through July 2017 (55 complete months).
+
+**Source:** `data/processed/train_standardized.csv`
+
+#### Validated findings
+
+- Store-family-day records analyzed: 2,974,158.
+- Product families: 33.
+- Stores: 54.
+- Missing promotion values: 0.
+- Negative promotion counts: 0.
+- Records with promotional activity: 599,545 (20.16%).
+- Records without promotional activity: 2,374,613 (79.84%).
+- Promotional records account for 64.44% of total sales.
+- Average sales per record without promotion: 158.90.
+- Average sales per record with promotion: 1,140.67.
+- PRODUCE has the highest observed promotion sales ratio among the top 10 sales families: 3.08x.
+- BOOKS has no observed promotional records; its comparison ratio is undefined and retained as missing.
+
+#### Generated reports
+
+- `reports/retail_driver_analysis/promotion_sales_comparison.csv`
+- `reports/retail_driver_analysis/product_family_promotion_comparison.csv`
+
+#### Business interpretation
+
+Records with promotional activity have substantially higher average sales than records without promotional activity. Differences vary across product families.
+
+These descriptive comparisons do not establish causal promotional uplift. Product mix, store characteristics, seasonality, time trends, and promotion selection may influence the observed relationships.
+
+The `onpromotion` field counts promoted items; it does not represent a discount percentage or transaction count.
+
+#### Validation
+
+- Promotion field missing/negative checks completed.
+- Overall promotion group record and sales reconciliation passed.
+- Family-level record reconciliation passed.
+- BOOKS missing comparison group investigated and documented.
+- Both exported CSV reports reloaded and validated.
+
+**Next:** Investigate promotion-sales relationships across stores and time, followed by forecasting implications.
