@@ -1801,6 +1801,7 @@ Sales contribution does not establish profitability, promotion effectiveness, or
 
 ```powershell
 python .\scripts\retail_driver_analysis\product_family_sales_contribution.py
+```
 
 ### Retail Driver Analysis — Promotion Activity vs. Sales
 
@@ -1849,3 +1850,93 @@ The `onpromotion` field counts promoted items; it does not represent a discount 
 - Both exported CSV reports reloaded and validated.
 
 **Next:** Investigate promotion-sales relationships across stores and time, followed by forecasting implications.
+
+## Retail Driver Analysis — Store Sales and Promotion Performance
+
+### Objective
+
+Analyze store-level sales performance, promotional activity, store classifications, and geographic sales concentration to identify potential drivers relevant to retail sales forecasting.
+
+### Analysis Scope
+
+- Period: January 2013 – July 2017 (55 complete months)
+- Sales records: 2,974,158
+- Stores: 54
+- Product families: 33
+- Cities: 22
+- Store types: 5
+- Total sales: 1,061,211,629.26
+
+### Key Business Findings
+
+**Store Performance**
+
+- Store 44 generated the highest sales: 61.47M.
+- Top five stores contributed 24.38% of total sales.
+- Top ten stores contributed 40.22%.
+
+**Promotion Activity**
+
+- Overall promotion record share: 20.16%.
+- Store 46 had the highest full-history promotion record share: 26.99%.
+- Original promotion–sales Pearson correlation: +0.728.
+- Active-month-adjusted correlation: +0.397.
+
+**Store Activity Investigation**
+
+- Store 52 first recorded positive sales on April 20, 2017.
+- It had 51 months with zero recorded sales.
+- Its full-history promotion record share was 3.16%.
+- During observed sales-active months, its promotion record share was 43.17%.
+
+**Store-Type Performance**
+
+- Type A contributed 32.89% of sales across nine stores.
+- Type D contributed 32.74% across eighteen stores.
+- Type A had the highest average sales per store: 38.78M.
+
+**Geographic Performance**
+
+- Quito contributed 51.91% of total sales.
+- Guayaquil contributed 11.45%.
+- Cuenca contributed 4.58%.
+- The top three cities contributed 67.94%.
+
+### Data Quality and Validation
+
+- Validated store metadata uniqueness and completeness.
+- Performed a validated one-to-one store metadata merge.
+- Reconciled sales and promotional record counts.
+- Validated store-type and city-level aggregations.
+- Investigated Store 52's unusual sales activity.
+- Compared original and active-month-adjusted correlations.
+- Exported and reloaded four analytical CSV reports.
+
+### Deliverables
+
+**Jupyter Notebook**
+
+`notebooks/04_retail_driver_analysis/02_store_sales_and_promotion_analysis.ipynb`
+
+**CSV Reports**
+
+- `reports/retail_driver_analysis/store_sales_promotion_performance.csv`
+- `reports/retail_driver_analysis/store_type_performance.csv`
+- `reports/retail_driver_analysis/city_sales_performance.csv`
+- `reports/retail_driver_analysis/store_active_month_performance.csv`
+
+### Analytical Limitations
+
+- Promotion activity measures records containing promoted items, not discount percentages or promotional effectiveness.
+- Correlation does not establish causation.
+- Observed sales activity does not confirm official store opening dates.
+- Average sales per active month does not fully account for partial operating months.
+- The original and adjusted correlations use different KPI definitions.
+- Store-type codes are retained without assuming their retail format meanings.
+
+### Forecasting Implications
+
+- Prioritize monitoring forecasts for high-revenue stores and cities.
+- Consider observed store activity history when developing store-level forecasting models.
+- Evaluate promotions alongside geographic, store-type and product-family characteristics.
+- Investigate partial operating periods before comparing forecasting accuracy across stores.
