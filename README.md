@@ -24,6 +24,28 @@ The goal is not only to forecast future sales, but to build a reliable analytica
 
 ---
 
+## Project Highlights — Validated Results
+
+> **Current milestone:** Seven-model matched-case forecasting comparison completed and validated. The project remains in development; these are historical backtest results, not production forecasts.
+
+| Highlight | Validated result |
+|---|---:|
+| Complete historical months | 55 (Jan 2013–Jul 2017) |
+| Sales records in complete-month analysis | 2,974,158 |
+| Total sales in complete-month analysis | 1,061,211,629.26 |
+| Stores / product families | 54 / 33 |
+| Forecast evaluation | 17 expanding windows; 51 matched forecast cases |
+| Forecasting models compared | 7 |
+| Lowest historical WAPE | **50/50 Blended — 8.36%** |
+| Lowest RMSE | **ETS Additive — 2,542,024.93** |
+| Smallest absolute aggregate bias | **ETS Damped Trend — +0.30%** |
+
+**Model-selection decision:** Retain the 50/50 Blended and ETS Additive models as candidates for independent future evaluation. The blend leads on WAPE but has **−6.45% aggregate bias** (underforecasting); ETS Additive has **+0.96% bias** and the lowest RMSE. No model has been approved for production deployment.
+
+**Evidence:** [`seven_model_forecast_comparison.csv`](reports/forecasting_feature_evaluation/seven_model_forecast_comparison.csv) and [`seven_model_matched_forecasts.csv`](reports/forecasting_feature_evaluation/seven_model_matched_forecasts.csv).
+
+---
+
 ## Business Problem
 
 Retail businesses need reliable estimates of future sales to support decisions involving:
@@ -51,7 +73,7 @@ This project addresses that problem by building a structured and reproducible re
 
 The initial forecasting objective is:
 
-> **Forecast monthly retail sales for the next 3–6 months.**
+> **Evaluate three-month-ahead forecasts of total monthly retail sales; explore longer horizons in future work.**
 
 The source dataset field `sales` will be used as the forecasting target.
 
@@ -65,7 +87,7 @@ The initial forecasting grain is:
 
 Daily Store × Product Family sales will be aggregated to monthly total sales before forecasting.
 
-The final forecast horizon and methodology will be confirmed after data preparation, exploratory analysis, and time-series validation.
+The evaluated forecast horizon is three months. Longer-horizon forecasting remains future work.
 
 This initial monthly total-business forecast is intended to support:
 
@@ -507,7 +529,7 @@ analysis or forecasting.
 
 ### Phase 3 — Data Quality & Preparation
 
-**Phase 3: In Progress**
+**Phase 3: Core data-quality and monthly-sales preparation milestones completed; additional feature preparation remains future work.**
 **Phase 3.1: Forecasting target and grain defined**
 **Phase 3.2: Controlled working datasets created without modifying raw source files**
 **Phase 3.3: Data standardization completed and validated**
@@ -1680,23 +1702,23 @@ The 50/50 blend retained the lowest pooled MAE and WAPE, while additive ETS reta
 
 ### Phase 4 — Retail Exploratory Analysis
 
-**Status: Not Started**
+**Status: Completed for monthly sales time-series exploration** (see Phase 3.8); further exploratory work may continue.
 
 ### Phase 5 — Retail Driver Analysis
 
-**Status: Not Started**
+**Status: Completed for product-family, promotion, store, and monthly promotion/sales analyses** (see the Retail Driver Analysis sections below).
 
 ### Phase 6 — Forecasting
 
-**Status: In Progress — initial monthly total-sales models evaluated**
+**Status: In Progress — seven monthly-sales forecasting models evaluated on matched rolling-origin cases**
 
 ### Phase 7 — Forecast Evaluation
 
-**Status: In Progress — rolling-origin evaluation completed for initial models; further error analysis and business evaluation remain**
+**Status: In Progress — seven-model matched-case comparison, historical reconciliation, and CSV export validated; independent final testing remains**
 
 ### Phase 8 — Business Insights & Planning
 
-**Status: Not Started**
+**Status: In Progress — validated descriptive insights and preliminary forecasting recommendations documented; operational planning not yet implemented**
 
 ### Phase 9 — Power BI Reporting
 
@@ -1727,19 +1749,40 @@ This project follows several principles:
 
 ## Findings
 
-*To be populated after analysis is completed.*
+- **Sales concentration:** The top six product families account for **82.62%** of sales in the 55-month analysis period.
+- **Promotion association:** Records with promotional activity represent **20.16%** of store–family–day records and **64.44%** of sales; this is descriptive, not causal uplift.
+- **Store concentration:** The five highest-sales stores account for **24.38%** of total sales.
+- **Seasonality:** December shows a recurring historical sales peak, while February is relatively weaker; month length alone does not explain the full difference.
+- **Forecasting:** The **50/50 Blended** model has the lowest pooled WAPE (**8.36%**), **ETS Additive** the lowest RMSE (**2.54M**), and **ETS Damped Trend** the smallest absolute aggregate bias (**+0.30%**).
+- **Trend adjustment:** Applying full historical growth to the seasonal-index model worsened WAPE from **14.52%** to **19.35%**.
+
+See the detailed analysis and model comparison sections below for methodology, validation, and limitations.
 
 ---
 
 ## Business Recommendations
 
-*To be populated after validated findings and forecast results are available.*
+1. **Retain two forecasting candidates:** 50/50 Blended for its lowest historical WAPE and ETS Additive for its lower RMSE and more balanced bias; assess both on a new, untouched evaluation period.
+2. **Quantify asymmetric forecasting costs:** Underforecasting can contribute to stockout risk, while overforecasting can increase excess-inventory risk. The available data do not quantify those costs.
+3. **Investigate concentrated errors:** Review January–May calendar-month errors before designing additional forecasting features.
+4. **Prioritize high-sales families and stores** for deeper, disaggregated analysis, while recognizing that sales contribution does not equal profitability.
+5. **Evaluate promotion and calendar predictors only when available at forecast time** and through chronological validation; descriptive correlation is not causal impact.
+
+These are analytical recommendations, not evidence of implemented operational improvements.
 
 ---
 
 ## Limitations
 
-*To be documented after the dataset, forecasting methodology, and validation results are finalized.*
+- The forecasting target is the source field `sales`; its definition does not justify relabeling it as net sales.
+- The primary forecasting grain is **month × total retail business**; results are not SKU-level, store-level, or inventory forecasts.
+- The 51 rolling-origin forecast cases contain overlapping calendar months and are **not 51 independent observations**.
+- The initial May–July 2017 holdout also appears in rolling-origin evaluation and is **not an untouched final test set**.
+- The seven models were compared and selected on the same historical backtest cases; the ranking is not an independent estimate of future performance.
+- Promotional activity is measured as promoted-item counts / presence, not discount rates, and correlations do not establish causation.
+- Forecasting models have not directly incorporated future-known promotional plans, holidays, pricing, or other external drivers.
+- The raw data end on August 15, 2017; incomplete August is excluded from complete-month forecasting.
+- Operational deployment, automated monitoring, inventory optimization, and Power BI reporting remain future work.
 
 ---
 
@@ -2125,7 +2168,7 @@ January through May contributed approximately 73.48%.
 2. Prioritize investigation of January–May forecasting errors.
 3. Avoid assuming historical sales growth will persist.
 4. Evaluate calendar and promotional features using leakage-safe validation.
-5. Compare candidates against existing naive, seasonal naive, blended, and ETS benchmarks before selecting a final forecasting model.
+5. Use the completed seven-model matched-case comparison to shortlist candidates, then validate on an untouched future period.
 
 ### Limitations
 
@@ -2134,7 +2177,7 @@ January through May contributed approximately 73.48%.
 - Partial trend weights were explored on the same validation cases; their results are not independent test estimates.
 - Historical growth and promotion relationships do not establish causation.
 - Promotional predictors have not yet been evaluated for forecast accuracy.
-- A matched-case comparison against the existing forecasting benchmarks is still required.
+- The matched-case comparison was subsequently completed; see **Seven-Model Matched-Case Forecast Benchmark** below.
 
 ### Reproducible Notebook
 
@@ -2161,4 +2204,79 @@ Historical calendar seasonality provides an interpretable forecasting approach, 
 
 The seasonal-index model achieved 14.52% WAPE compared with 19.35% for the full trend-adjusted model.
 
-The next forecasting development priority is a matched-case comparison with established benchmarks and leakage-safe evaluation of additional calendar and promotional features.
+The matched-case comparison with established benchmarks has now been completed (see below). The next development priority is independent validation and leakage-safe evaluation of additional calendar and promotional features.
+
+---
+
+## Seven-Model Matched-Case Forecast Benchmark
+
+**Status:** Completed and validated locally; repository synchronization is the next Git checkpoint.
+
+### Objective and evaluation design
+
+Compare five existing benchmark methods with two seasonal-index methods under the **same rolling-origin evaluation design**, rather than comparing metrics calculated from different periods or forecast origins.
+
+- **Target:** Source `sales`, aggregated to month × total retail business
+- **History:** 55 complete months, January 2013–July 2017
+- **Training:** Expanding chronological windows, minimum 36 months
+- **Forecast horizon:** Three months per origin
+- **Evaluation:** 17 windows and 51 matched forecast cases, covering validation months January 2016–July 2017
+- **Match keys:** `window_id`, `train_end`, and `month`; actual sales reconciled across notebooks
+- **Metrics:** MAE, RMSE, pooled WAPE, and pooled bias
+- **Error convention:** Forecast minus actual; negative bias means underforecasting
+
+### Validated model comparison
+
+| Rank by WAPE | Model | MAE | RMSE | WAPE | Bias |
+|---:|---|---:|---:|---:|---:|
+| 1 | **50/50 Blended** | **2,067,404.61** | 2,737,131.72 | **8.36%** | −6.45% |
+| 2 | ETS Additive | 2,098,242.04 | **2,542,024.93** | 8.48% | +0.96% |
+| 3 | ETS Damped Trend | 2,118,859.66 | 2,549,228.14 | 8.56% | **+0.30%** |
+| 4 | Naive | 2,178,014.34 | 2,735,640.76 | 8.80% | −0.59% |
+| 5 | Seasonal Naive | 3,210,528.38 | 4,529,398.49 | 12.98% | −12.31% |
+| 6 | Seasonal Index | 3,591,288.90 | 4,136,902.96 | 14.52% | −8.09% |
+| 7 | Trend-Adjusted Seasonal Index | 4,786,033.22 | 6,151,133.27 | 19.35% | +12.58% |
+
+**WAPE** is total absolute forecast error divided by total absolute actual sales across the 51 forecast cases; it is not the proportion of individual forecasts that are correct. **Bias** is the signed total error divided by total absolute actual sales. Overlapping forecast months contribute multiple forecast cases to these pooled metrics.
+
+### Retail interpretation and decision
+
+The **50/50 Blended** model has the lowest historical pooled WAPE, but its **−6.45% bias** indicates overall underforecasting. **ETS Additive** has slightly higher WAPE (8.48%) but the lowest RMSE and substantially smaller aggregate bias (+0.96%). **ETS Damped Trend** has the smallest absolute bias (+0.30%) but slightly higher WAPE than either candidate.
+
+**Decision:** Retain **50/50 Blended** and **ETS Additive** for further evaluation. The historical ranking alone does not justify production deployment. Evaluate both on a genuinely untouched chronological period and incorporate business-specific costs of underforecasting and overforecasting before choosing a production model.
+
+The seasonal-index model (14.52% WAPE) and its full historical-growth adjustment (19.35%) did not outperform the established benchmarks. Greater model complexity or stronger trend extrapolation did not guarantee improved accuracy.
+
+### Quality assurance and reproducibility
+
+- Verified **51 forecast cases** and **17 unique rolling-origin windows**.
+- Confirmed three forecast months per window, no duplicate match keys, and chronological training cutoffs.
+- Matched all original and new predictions on `window_id`, `train_end`, and `month`.
+- Reconciled actual sales values between forecasting notebooks within **0.01** sales units.
+- Recomputed the five original benchmark metrics and reconciled them with saved historical results, allowing for displayed rounding.
+- Exported and reloaded the final seven-model comparison (**7 rows**) and matched forecast predictions (**51 rows**); export checks passed.
+- No future actual sales were used to construct earlier-origin predictions. Model selection on the evaluated cases remains a separate limitation.
+
+### Notebooks
+
+- [`01_forecasting_and_evaluation.ipynb`](notebooks/05_forecasting/01_forecasting_and_evaluation.ipynb) — original baseline, blended, and ETS forecasts
+- [`02_forecasting_feature_evaluation.ipynb`](notebooks/05_forecasting/02_forecasting_feature_evaluation.ipynb) — seasonal-index and trend evaluation, matched-case reconciliation, seven-model comparison
+
+### Validated report artifacts
+
+All files are in [`reports/forecasting_feature_evaluation/`](reports/forecasting_feature_evaluation/):
+
+| File | Description | Rows |
+|---|---|---:|
+| `original_benchmark_rolling_forecasts.csv` | Five benchmark model predictions | 51 |
+| `seven_model_forecast_comparison.csv` | Final seven-model metrics | 7 |
+| `seven_model_matched_forecasts.csv` | Matched individual predictions for all seven models | 51 |
+
+The earlier eight seasonal-index feature-evaluation reports remain documented in the preceding section.
+
+### Next development priorities
+
+1. Establish an untouched, later chronological test period if additional data are available; otherwise explicitly retain the backtest-only limitation.
+2. Compare forecast error by horizon, calendar month, and origin for the shortlisted models.
+3. Evaluate additional calendar and promotional features without future-information leakage.
+4. Translate model forecasts and uncertainty into business planning scenarios and Power BI reporting.
