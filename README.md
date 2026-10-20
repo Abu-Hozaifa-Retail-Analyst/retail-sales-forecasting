@@ -2032,3 +2032,133 @@ Month length does not fully explain the observed sales difference, although thes
 Monthly sales, promotion activity, time-trend diagnostics, seasonal index analysis, and calendar-day adjusted analysis are complete.
 
 The next forecasting stage will evaluate whether these findings improve out-of-sample forecast accuracy.
+
+## Forecasting Feature Evaluation — Seasonal Index and Trend Analysis
+
+### Business Objective
+
+Evaluate whether historical calendar seasonality and sales growth improve monthly retail sales forecasting accuracy using leakage-safe rolling-origin validation.
+
+### Dataset and Evaluation Design
+
+- Dataset: Corporación Favorita Grocery Sales Forecasting
+- Monthly observations: 55 (January 2013–July 2017)
+- Total historical sales: 1,061,211,629.26
+- Minimum training history: 36 months
+- Forecast horizon: 3 months
+- Rolling-origin windows: 17
+- Total forecast cases: 51
+- Validation period: January 2016–July 2017
+- Target reconciliation: PASSED, maximum difference 0.00
+
+Training windows expand chronologically. Seasonal indices and growth factors are calculated using training data only.
+
+### Forecasting Models Evaluated
+
+**Seasonal-Index Model**
+
+Combines the most recent 12-month average sales with historical calendar-month seasonal indices calculated from complete training years.
+
+**Trend-Adjusted Seasonal-Index Model**
+
+Applies a historical year-over-year growth factor to the seasonal-index forecast.
+
+**Partial Trend Adjustments**
+
+Exploratory adjustment weights of 0%, 25%, 50%, 75%, and 100% were evaluated.
+
+### Model Performance
+
+| Model | MAE | RMSE | WAPE | Bias |
+|---|---:|---:|---:|---:|
+| Seasonal Index | 3,591,288.90 | 4,136,902.96 | 14.52% | -8.09% |
+| Trend-Adjusted Seasonal Index | 4,786,033.22 | 6,151,133.27 | 19.35% | +12.58% |
+
+The unadjusted seasonal-index model achieved lower WAPE, MAE, and RMSE than the full trend-adjusted model.
+
+### Historical Growth Findings
+
+- Positive historical growth: 17 of 17 rolling windows
+- Average 12-month growth: 22.36%
+- Minimum growth: 6.90%
+- Maximum growth: 35.87%
+
+Despite positive historical growth, applying the full growth factor increased forecasting error.
+
+### Partial Trend Adjustment Findings
+
+| Trend Weight | WAPE | Bias |
+|---|---:|---:|
+| 0% | 14.52% | -8.09% |
+| 25% | 15.10% | -2.92% |
+| 50% | 16.00% | +2.24% |
+| 75% | 17.27% | +7.41% |
+| 100% | 19.35% | +12.58% |
+
+The 25% adjustment reduced absolute bias and slightly improved RMSE, but the 0% adjustment achieved the lowest WAPE among these candidates.
+
+### Forecast Horizon Findings
+
+| Horizon | WAPE | Bias |
+|---|---:|---:|
+| 1 month | 14.70% | -7.99% |
+| 2 months | 14.74% | -8.25% |
+| 3 months | 14.12% | -8.03% |
+
+Underforecasting persisted across all three forecast horizons.
+
+### Calendar-Month Error Concentration
+
+The largest contributors to total absolute forecast error were:
+
+- April: 21.52%
+- May: 15.69%
+- February: 15.60%
+
+These three months accounted for 52.81% of total absolute error across the evaluated forecast cases.
+
+January through May contributed approximately 73.48%.
+
+### Retail Business Recommendations
+
+1. Retain the unadjusted seasonal-index model as the better WAPE performer among the tested trend weights.
+2. Prioritize investigation of January–May forecasting errors.
+3. Avoid assuming historical sales growth will persist.
+4. Evaluate calendar and promotional features using leakage-safe validation.
+5. Compare candidates against existing naive, seasonal naive, blended, and ETS benchmarks before selecting a final forecasting model.
+
+### Limitations
+
+- Rolling-origin forecast cases overlap.
+- Calendar-month groups contain only 3–6 forecast cases.
+- Partial trend weights were explored on the same validation cases; their results are not independent test estimates.
+- Historical growth and promotion relationships do not establish causation.
+- Promotional predictors have not yet been evaluated for forecast accuracy.
+- A matched-case comparison against the existing forecasting benchmarks is still required.
+
+### Reproducible Notebook
+
+`notebooks/05_forecasting/02_forecasting_feature_evaluation.ipynb`
+
+### Exported Reports
+
+All eight reports are stored in `reports/forecasting_feature_evaluation/`:
+
+- `seasonal_model_comparison.csv`
+- `seasonal_index_rolling_forecasts.csv`
+- `trend_adjusted_rolling_forecasts.csv`
+- `forecast_horizon_diagnostics.csv`
+- `calendar_month_forecast_errors.csv`
+- `calendar_month_error_contribution.csv`
+- `historical_sales_trend_diagnostics.csv`
+- `partial_trend_adjustment_comparison.csv`
+
+**Data validation:** Eight reports, 153 total rows, with successful row-count and schema checks.
+
+### Conclusion
+
+Historical calendar seasonality provides an interpretable forecasting approach, but adding the full historical sales growth factor worsened accuracy.
+
+The seasonal-index model achieved 14.52% WAPE compared with 19.35% for the full trend-adjusted model.
+
+The next forecasting development priority is a matched-case comparison with established benchmarks and leakage-safe evaluation of additional calendar and promotional features.
