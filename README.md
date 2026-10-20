@@ -26,7 +26,7 @@ The goal is not only to forecast future sales, but to build a reliable analytica
 
 ## Project Highlights — Validated Results
 
-> **Current milestone:** Seven-model matched-case forecasting comparison completed and validated. The project remains in development; these are historical backtest results, not production forecasts.
+> **Current milestone:** Seven-model matched-case forecasting comparison and calendar/promotion feature availability audit completed and validated. Feature modeling remains in development; the model metrics are historical backtest results, not production forecasts.
 
 | Highlight | Validated result |
 |---|---:|
@@ -1710,11 +1710,11 @@ The 50/50 blend retained the lowest pooled MAE and WAPE, while additive ETS reta
 
 ### Phase 6 — Forecasting
 
-**Status: In Progress — seven monthly-sales forecasting models evaluated on matched rolling-origin cases**
+**Status: In Progress — seven-model comparison completed; calendar and promotion feature availability audit completed; feature modeling pending**
 
 ### Phase 7 — Forecast Evaluation
 
-**Status: In Progress — seven-model matched-case comparison, historical reconciliation, and CSV export validated; independent final testing remains**
+**Status: In Progress — seven-model matched-case comparison and feature availability audit validated; independent final testing remains**
 
 ### Phase 8 — Business Insights & Planning
 
@@ -2210,7 +2210,7 @@ The matched-case comparison with established benchmarks has now been completed (
 
 ## Seven-Model Matched-Case Forecast Benchmark
 
-**Status:** Completed and validated locally; repository synchronization is the next Git checkpoint.
+**Status:** Completed, validated, committed, and synchronized with GitHub (`cf92afb`).
 
 ### Objective and evaluation design
 
@@ -2280,3 +2280,65 @@ The earlier eight seasonal-index feature-evaluation reports remain documented in
 2. Compare forecast error by horizon, calendar month, and origin for the shortlisted models.
 3. Evaluate additional calendar and promotional features without future-information leakage.
 4. Translate model forecasts and uncertainty into business planning scenarios and Power BI reporting.
+
+---
+
+## Calendar & Promotion Feature Engineering — Feature Availability Audit
+
+**Status:** Completed — monthly reconciliation, promotion coverage investigation, feature availability classification, and CSV export validated. Calendar and promotion forecasting model development remains pending.
+
+### Business Objective
+
+Assess whether calendar information and historical promotional activity can improve monthly retail sales forecasting without introducing future-data leakage.
+
+### Dataset Preparation and Validation
+
+- Joined monthly sales and promotion datasets at **Month × Total Retail Business** grain using a validated one-to-one merge.
+- Confirmed **55 matched complete months**, January 2013–July 2017, with unique month keys and no missing selected fields.
+- Reconciled monthly sales across both sources with a **maximum difference of 0.00**.
+- Created a combined analytical DataFrame with **15 columns before** adding the promotion coverage quality flag; source datasets were not modified.
+
+### Promotion Data Quality Findings
+
+| Measure | Validated result |
+|---|---:|
+| Months with recorded promotions | 40 |
+| Months without recorded promotions | 15 |
+| First month with recorded promotions | April 2014 |
+| Last month with recorded promotions | July 2017 |
+| `COVERAGE_UNCERTAIN` | 15 months (Jan 2013–Mar 2014) |
+| `RECORDED_PERIOD` | 40 months (Apr 2014–Jul 2017) |
+
+The 15 consecutive early months with zero recorded promotions **do not prove that no promotions occurred**. They may reflect either genuine inactivity or a data collection limitation; the cause has not been established. `RECORDED_PERIOD` indicates dates after the first observed promotional activity, **not** independently verified complete tracking.
+
+The source `onpromotion` field is a **count of promoted items**, not a discount percentage or a transaction-level promotion indicator. `promotion_record_share_pct` measures the share of store–family–day records with at least one promoted item.
+
+### Forecast-Time Feature Availability Rules
+
+A validated audit classified **10 features** according to their availability and analytical role:
+
+| Classification | Audited features | Forecasting rule |
+|---|---|---|
+| `KNOWN_IN_ADVANCE` | `month`, `calendar_days` | Calendar information can be calculated for future months |
+| `TARGET` | `total_sales` | Future realized sales must never be a predictor |
+| `HISTORICAL_ONLY` | `promotion_record_share_pct`, `total_promoted_item_counts`, `promotional_records`, `stores_observed`, `total_records` | Use observations available **at the forecast origin**, not realized values for forecast months |
+| `REQUIRES_INVESTIGATION` | `sales_closure_days` | Confirm advance availability before using as a future feature |
+| `QUALITY_FLAG` | `promotion_coverage_status` | Preserve early-period coverage uncertainty during feature design |
+
+**Leakage control:** For a forecast issued at the end of April 2017 for May–July 2017, calendar attributes are known, but actual May–July sales and realized promotional activity are not. Any lagged or rolling historical predictor must be constructed relative to the **April forecast origin** for all three forecast horizons.
+
+### Reproducible Deliverables
+
+- **Notebook:** [`03_calendar_promotion_feature_engineering.ipynb`](notebooks/05_forecasting/03_calendar_promotion_feature_engineering.ipynb)
+- **Validated report:** [`feature_availability_audit.csv`](reports/forecasting_feature_engineering/feature_availability_audit.csv) — **10 rows**, successfully exported and read back.
+
+### Next Steps
+
+1. Engineer advance-known calendar features and verify date/holiday availability.
+2. Engineer historical promotion features with origin-aware cutoffs and coverage safeguards.
+3. Validate features, leakage controls, and chronological alignment.
+4. Compare candidate models with the existing **17 rolling-origin windows and 51 matched forecast cases**, using MAE, RMSE, WAPE, and bias.
+
+**Current benchmark:** 50/50 Blended — **8.36% historical pooled WAPE**. This is a development backtest result, not an independent final-test result or production guarantee.
+
+---

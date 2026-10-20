@@ -1,0 +1,11 @@
+feature,availability,reason
+month,KNOWN_IN_ADVANCE,Calendar month is known
+calendar_days,KNOWN_IN_ADVANCE,Calendar days are known
+total_sales,TARGET,Future sales must not be used
+promotion_record_share_pct,HISTORICAL_ONLY,Use only observations available at forecast origin
+total_promoted_item_counts,HISTORICAL_ONLY,Use only observations available at forecast origin
+promotional_records,HISTORICAL_ONLY,Future realized counts are unavailable
+sales_closure_days,REQUIRES_INVESTIGATION,Confirm whether closure dates were known in advance
+stores_observed,HISTORICAL_ONLY,Future observed store coverage is unknown
+total_records,HISTORICAL_ONLY,Future realized source-record counts are unknown
+promotion_coverage_status,QUALITY_FLAG,Early promotion coverage is uncertain
