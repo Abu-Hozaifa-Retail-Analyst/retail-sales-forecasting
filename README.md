@@ -2341,4 +2341,97 @@ A validated audit classified **10 features** according to their availability and
 
 **Current benchmark:** 50/50 Blended — **8.36% historical pooled WAPE**. This is a development backtest result, not an independent final-test result or production guarantee.
 
+## Calendar & Promotion Feature Engineering — Completed
+
+### Business Objective
+
+Develop forecast-safe calendar and historical promotion features to investigate whether these variables improve monthly retail sales forecasting accuracy.
+
+The feature engineering process follows the existing rolling-origin forecasting framework and prevents realized future promotion activity from entering forecast predictors.
+
+### Dataset and Forecasting Design
+
+| Component | Result |
+|---|---|
+| Historical period | January 2013–July 2017 |
+| Complete monthly observations | 55 |
+| Rolling forecast windows | 17 |
+| Forecast horizon | 3 months |
+| Forecast evaluation cases | 51 |
+| Exported dataset columns | 18 |
+| Feature leakage validation | Passed |
+
+### Calendar Features
+
+Created and validated six calendar features:
+
+- `calendar_year`
+- `calendar_month`
+- `calendar_quarter`
+- `days_in_month`
+- `is_december`
+- `is_february`
+
+**Validation results:**
+
+- Missing calendar feature values: 0
+- Duplicate months: 0
+- Missing calendar months: 0
+- December observations: 4
+- February observations: 5
+
+Calendar features are known in advance and can be constructed for future forecast periods.
+
+### Historical Promotion Features
+
+Created three historical promotion predictors:
+
+- `origin_promotion_share_lag_1`: Latest recorded monthly promotion share available at the forecast origin.
+- `origin_promotion_share_3m_avg`: Average recorded promotion share across the latest three available months.
+- `origin_promoted_items_3m_sum`: Total promoted-item counts across the latest three available months.
+
+Also created `origin_promotion_coverage_complete` to validate historical promotion coverage.
+
+**Data quality consideration:** The first 15 months (January 2013–March 2014) have uncertain promotion coverage. Recorded promotion activity begins in April 2014. These early zeros are not assumed to represent confirmed absence of promotions.
+
+### Forecast-Origin Data Leakage Prevention
+
+Promotion features are calculated separately for each forecast origin using historical observations through `train_end`.
+
+All three forecast horizons within a window receive the same historical promotion snapshot.
+
+**Validation results:**
+
+- Independently validated forecast windows: 17
+- Forecast cases validated: 51
+- Windows with inconsistent promotion features: 0
+- Future promotion observations used by the feature builder: 0
+- Forecast-origin promotion coverage checks: Passed
+
+### Exported Deliverable
+
+`reports/forecasting_feature_engineering/rolling_origin_calendar_promotion_features.csv`
+
+The exported dataset contains 51 rows and 18 columns, including calendar predictors, historical promotion predictors, forecast metadata, actual sales for evaluation, and historical blended and ETS benchmark predictions.
+
+**Notebook:**
+
+`notebooks/05_forecasting/03_calendar_promotion_feature_engineering.ipynb`
+
+### Forecasting Governance
+
+Actual sales are retained only for forecast evaluation, not as predictors.
+
+Historical benchmark predictions are retained for comparison.
+
+The exported 51 evaluation cases must not be used to train and evaluate a new model on the same rows.
+
+### Current Status
+
+**Calendar and historical promotion feature engineering: Completed and validated.**
+
+**Next stage:** Evaluate calendar and promotion features using leakage-safe rolling-origin forecasting and compare accuracy against the existing blended model benchmark (8.36% WAPE) and ETS Additive benchmark (8.48% WAPE).
+
+Feature engineering alone does not establish that these variables improve forecast accuracy.
+
 ---
