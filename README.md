@@ -1940,3 +1940,95 @@ Analyze store-level sales performance, promotional activity, store classificatio
 - Consider observed store activity history when developing store-level forecasting models.
 - Evaluate promotions alongside geographic, store-type and product-family characteristics.
 - Investigate partial operating periods before comparing forecasting accuracy across stores.
+
+## Retail Driver Analysis — Monthly Promotion and Sales Trends
+
+### Business Objective
+
+Analyze monthly retail sales, promotional activity, and recurring seasonal patterns to identify potential drivers relevant to retail sales forecasting.
+
+The analysis uses 55 complete months from January 2013 through July 2017, covering 2,974,158 store–family–day records across 54 stores and 33 product families.
+
+### Key Business Findings
+
+**1. Monthly Sales Performance**
+
+- Total sales: 1,061.21 million
+- Average monthly sales: 19.29 million
+- Highest sales month: December 2016 — 29.64 million
+- Lowest sales month: February 2013 — 9.66 million
+
+**2. Promotional Activity**
+
+- Overall promotion record share: 20.16%
+- Highest promotion record share: May 2017 — 49.19%
+- Lowest promotion record share: January 2013 — 0.00%
+
+Promotion record share represents the percentage of store–family–day records with at least one promoted item, not the percentage of discounted transactions.
+
+**3. Promotion–Sales Correlation**
+
+- Monthly sales vs. promotion record share: Pearson correlation = +0.866
+- Month-over-month sales growth vs. promotion-share change: Pearson correlation = +0.293
+- Valid month-over-month comparisons: 54
+
+The weaker correlation between monthly changes is consistent with the possibility that shared time trends contributed to the stronger original association. Correlation does not establish causation.
+
+**4. Sales Seasonality**
+
+Using four complete calendar years (2013–2016):
+
+- December average seasonal index: 1.334
+- December sales exceeded the yearly monthly average in all four years
+- December seasonal index range: 1.232–1.394
+- February average seasonal index: 0.778
+
+These findings suggest a recurring historical December sales peak.
+
+**5. Calendar-Day Adjusted Sales**
+
+- February average daily sales: 570,574.44
+- December average daily sales: 782,482.59
+- December-to-February average daily sales ratio: 1.371
+
+Month length does not fully explain the observed sales difference, although these comparisons remain influenced by the available years and other factors.
+
+### Forecasting Recommendations
+
+1. Evaluate seasonality-aware forecasting models against established baselines.
+2. Test promotional activity as a potential forecasting feature using information available at forecast time.
+3. Investigate calendar-day effects in monthly sales forecasts.
+4. Use rolling-origin evaluation and metrics such as WAPE, MAE, and RMSE.
+5. Translate validated forecasts into inventory, staffing, and promotional planning decisions.
+
+### Analytical Limitations
+
+- Source data is aggregated at store–family–day level, not transaction level.
+- `onpromotion` represents promoted-item counts, not discount percentages.
+- Correlations are descriptive and do not demonstrate promotional effectiveness.
+- Month-to-month changes do not eliminate all time-related confounding.
+- Within-year seasonal indices use four complete years.
+- Calendar-month comparisons may still reflect growth, store activity, and other operational changes.
+- Forecasting improvements must be verified through out-of-sample evaluation.
+
+### Reproducible Deliverables
+
+**Jupyter Notebook**
+
+`notebooks/04_retail_driver_analysis/03_monthly_promotion_and_sales_trends.ipynb`
+
+**CSV Reports**
+
+- `reports/retail_driver_analysis/monthly_sales_promotion_performance.csv` — 55 rows
+- `reports/retail_driver_analysis/monthly_sales_promotion_changes.csv` — 55 rows
+- `reports/retail_driver_analysis/calendar_month_seasonality.csv` — 12 rows
+- `reports/retail_driver_analysis/within_year_seasonal_indices.csv` — 12 rows
+- `reports/retail_driver_analysis/calendar_day_adjusted_seasonality.csv` — 12 rows
+
+**Total: 5 validated report exports containing 146 rows.**
+
+### Project Status
+
+Monthly sales, promotion activity, time-trend diagnostics, seasonal index analysis, and calendar-day adjusted analysis are complete.
+
+The next forecasting stage will evaluate whether these findings improve out-of-sample forecast accuracy.
