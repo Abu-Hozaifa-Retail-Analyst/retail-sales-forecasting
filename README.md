@@ -2588,4 +2588,118 @@ training information available at their forecast origins.
 
 ---
 
+## Phase 6.4 — Forecast Robustness, Model Comparison and Selection
 
+### Objective
+
+Evaluate the robustness of nine forecasting models across matched historical rolling-origin windows, forecast horizons, and time periods. Develop an evidence-based model recommendation for aggregate monthly retail sales planning.
+
+### Evaluation Design
+
+- **Forecast target:** Monthly total retail Sales (not verified Net Sales)
+- **Models evaluated:** 9
+- **Rolling-origin windows:** 17
+- **Forecast horizons:** 1, 2, and 3 months
+- **Matched forecast cases per model:** 51
+- **Total model-case records:** 459
+- **Evaluation period:** Historical forecast origins from December 2015 through April 2017, with targets through July 2017
+- **Important limitation:** Forecast target months overlap across rolling-origin windows; evaluation cases are not statistically independent.
+
+### Nine-Model Accuracy Comparison
+
+| Model | WAPE | RMSE | Bias |
+|---|---:|---:|---:|
+| 50/50 Blended | **8.36%** | 2,737,131.72 | -6.45% |
+| ETS Additive | 8.48% | **2,542,024.93** | +0.96% |
+| ETS Damped Trend | 8.56% | 2,549,228.14 | **+0.30%** |
+| Naive | 8.80% | 2,735,640.76 | -0.59% |
+| Calendar Only | 10.01% | 3,007,249.48 | -7.85% |
+| Calendar + Promotion | 12.24% | 3,789,357.27 | -1.34% |
+| Seasonal Naive | 12.98% | 4,529,398.49 | -12.31% |
+| Seasonal Index | 14.52% | 4,136,902.96 | -8.09% |
+| Trend-Adjusted Seasonal Index | 19.35% | 6,151,133.27 | +12.58% |
+
+### Key Analytical Findings
+
+**1. Overall accuracy and stability differ.**
+
+50/50 Blended achieved the lowest pooled WAPE (8.36%), while ETS Additive achieved the lowest RMSE and had substantially smaller aggregate bias.
+
+**2. Forecast horizon affects model performance.**
+
+ETS Damped Trend achieved the lowest WAPE at horizons 1 and 2, while 50/50 Blended achieved the lowest WAPE at horizon 3.
+
+**3. Historical window wins do not determine overall accuracy.**
+
+Naive won the most rolling-origin windows (5 of 17). ETS Additive won 4, while 50/50 Blended won 1. In a direct comparison, ETS Additive outperformed Blended in 12 of 17 matched windows.
+
+**4. Large forecast errors are concentrated in certain periods.**
+
+The three largest absolute-error-contributing windows accounted for:
+
+- 39.05% of Blended's total evaluated absolute error.
+- 28.05% of ETS Additive's total evaluated absolute error.
+- 28.21% of ETS Damped Trend's total evaluated absolute error.
+
+**5. Model rankings changed across historical periods.**
+
+Among all nine models, Naive achieved the lowest WAPE in earlier origins (8.70%), while ETS Damped Trend achieved the lowest WAPE in later origins (5.38%).
+
+The chronological comparison is descriptive and does not constitute an independent holdout test.
+
+### Model Selection Recommendation
+
+**Primary candidate for further validation: ETS Additive**
+
+ETS Additive provides a balanced historical performance profile across overall accuracy, RMSE, forecast bias, rolling-window stability, and worst-window errors.
+
+**Challenger models:**
+
+- **50/50 Blended:** Lowest pooled WAPE.
+- **ETS Damped Trend:** Smallest absolute aggregate bias and lowest rolling-window WAPE variability.
+
+No model has been approved for production deployment.
+
+### Validated Outputs
+
+**Notebook**
+
+`notebooks/05_forecasting/05_forecast_robustness_and_selection.ipynb`
+
+**CSV reports**
+
+| Report | Records | Purpose |
+|---|---:|---|
+| `nine_model_accuracy_comparison.csv` | 9 | Overall forecasting accuracy |
+| `forecast_horizon_accuracy.csv` | 27 | Accuracy by forecast horizon |
+| `rolling_window_accuracy.csv` | 153 | Historical window-level robustness |
+| `model_selection_scorecard.csv` | 9 | Consolidated model-selection evidence |
+
+All reports are located in:
+
+`reports/forecasting_robustness/`
+
+### Data Quality and Governance
+
+The analysis includes:
+
+- Validation of model-case matching across forecast datasets.
+- Reconciliation of actual sales values.
+- Duplicate-key and missing-value checks.
+- Verification of model, window, and horizon coverage.
+- Export-and-reload validation for each CSV.
+- Independent reconstruction of forecasting metrics.
+- Cross-report reconciliation of WAPE, RMSE, MAE, and Bias.
+
+**Final validation status: PASSED — four reports reconciled.**
+
+### Limitations and Next Steps
+
+- Forecast cases overlap across rolling-origin windows.
+- The source target is Sales, not verified Net Sales.
+- Aggregate monthly forecasts cannot directly determine SKU-level replenishment quantities.
+- Historical results do not establish promotion causality.
+- No independent untouched final test period has been evaluated.
+- Future validation should establish business acceptance thresholds, test unseen periods, assess operational impact, and define monitoring and retraining procedures.
+
+**Phase 6.4 status: Analytical evaluation and report validation completed; GitHub synchronization pending.**
