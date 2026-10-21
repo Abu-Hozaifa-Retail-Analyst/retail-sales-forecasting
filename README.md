@@ -26,7 +26,7 @@ The goal is not only to forecast future sales, but to build a reliable analytica
 
 ## Project Highlights — Validated Results
 
-> **Current milestone:** Seven-model matched-case forecasting comparison and calendar/promotion feature availability audit completed and validated. Feature modeling remains in development; the model metrics are historical backtest results, not production forecasts.
+> **Current milestone:** Phase 6.3 calendar/promotion Ridge forecasting evaluation completed and validated. Nine distinct forecasting methods have now been evaluated across the project (the original seven-model benchmark plus two Ridge variants). All metrics are historical rolling-origin backtest results, not independent final-test or production forecasts.
 
 | Highlight | Validated result |
 |---|---:|
@@ -35,14 +35,17 @@ The goal is not only to forecast future sales, but to build a reliable analytica
 | Total sales in complete-month analysis | 1,061,211,629.26 |
 | Stores / product families | 54 / 33 |
 | Forecast evaluation | 17 expanding windows; 51 matched forecast cases |
-| Forecasting models compared | 7 |
+| Distinct forecasting methods evaluated | **9** (7 original + 2 Ridge) |
 | Lowest historical WAPE | **50/50 Blended — 8.36%** |
 | Lowest RMSE | **ETS Additive — 2,542,024.93** |
-| Smallest absolute aggregate bias | **ETS Damped Trend — +0.30%** |
+| Smallest absolute aggregate bias among original seven | **ETS Damped Trend — +0.30%** |
+| Calendar Only Ridge WAPE | **10.01%** |
+| Calendar + Promotion Ridge WAPE | **12.24%** |
+| Phase 6.3 validated exports | **102 forecasts; 4 comparison rows; 17 window diagnostics** |
 
 **Model-selection decision:** Retain the 50/50 Blended and ETS Additive models as candidates for independent future evaluation. The blend leads on WAPE but has **−6.45% aggregate bias** (underforecasting); ETS Additive has **+0.96% bias** and the lowest RMSE. No model has been approved for production deployment.
 
-**Evidence:** [`seven_model_forecast_comparison.csv`](reports/forecasting_feature_evaluation/seven_model_forecast_comparison.csv) and [`seven_model_matched_forecasts.csv`](reports/forecasting_feature_evaluation/seven_model_matched_forecasts.csv).
+**Evidence:** [`seven_model_forecast_comparison.csv`](reports/forecasting_feature_evaluation/seven_model_forecast_comparison.csv), [`seven_model_matched_forecasts.csv`](reports/forecasting_feature_evaluation/seven_model_matched_forecasts.csv), and [`four_model_accuracy_comparison.csv`](reports/forecasting_feature_evaluation/four_model_accuracy_comparison.csv).
 
 ---
 
@@ -1710,11 +1713,11 @@ The 50/50 blend retained the lowest pooled MAE and WAPE, while additive ETS reta
 
 ### Phase 6 — Forecasting
 
-**Status: In Progress — seven-model comparison completed; calendar and promotion feature availability audit completed; feature modeling pending**
+**Status: In Progress — seven-model benchmark, calendar/promotion feature engineering, and Phase 6.3 Ridge model evaluation completed; further modeling and independent testing remain**
 
 ### Phase 7 — Forecast Evaluation
 
-**Status: In Progress — seven-model matched-case comparison and feature availability audit validated; independent final testing remains**
+**Status: In Progress — seven-model benchmark and four-model Ridge comparison validated on matched rolling-origin cases; independent final testing remains**
 
 ### Phase 8 — Business Insights & Planning
 
@@ -1755,6 +1758,8 @@ This project follows several principles:
 - **Seasonality:** December shows a recurring historical sales peak, while February is relatively weaker; month length alone does not explain the full difference.
 - **Forecasting:** The **50/50 Blended** model has the lowest pooled WAPE (**8.36%**), **ETS Additive** the lowest RMSE (**2.54M**), and **ETS Damped Trend** the smallest absolute aggregate bias (**+0.30%**).
 - **Trend adjustment:** Applying full historical growth to the seasonal-index model worsened WAPE from **14.52%** to **19.35%**.
+- **Calendar/promotion modeling:** Calendar Only Ridge reached **10.01% WAPE**; adding historical promotion features increased WAPE to **12.24%**, despite improving 30/51 cases and reducing aggregate bias magnitude.
+- **Error concentration:** Five forecast-origin windows accounted for **94.77%** of the promotion model's positive absolute-error deterioration; this is diagnostic association, not evidence of causation.
 
 See the detailed analysis and model comparison sections below for methodology, validation, and limitations.
 
@@ -1764,9 +1769,9 @@ See the detailed analysis and model comparison sections below for methodology, v
 
 1. **Retain two forecasting candidates:** 50/50 Blended for its lowest historical WAPE and ETS Additive for its lower RMSE and more balanced bias; assess both on a new, untouched evaluation period.
 2. **Quantify asymmetric forecasting costs:** Underforecasting can contribute to stockout risk, while overforecasting can increase excess-inventory risk. The available data do not quantify those costs.
-3. **Investigate concentrated errors:** Review January–May calendar-month errors before designing additional forecasting features.
+3. **Investigate concentrated errors:** Review January–May seasonal-index errors and the April–July 2016 forecast origins where the promotion Ridge model deteriorated sharply. Avoid causal claims without further evidence.
 4. **Prioritize high-sales families and stores** for deeper, disaggregated analysis, while recognizing that sales contribution does not equal profitability.
-5. **Evaluate promotion and calendar predictors only when available at forecast time** and through chronological validation; descriptive correlation is not causal impact.
+5. **Use only forecast-time-available predictors:** The calendar/promotion Ridge experiment is complete and did not outperform the blended or ETS benchmarks. Evaluate new specifications only through chronological validation; descriptive correlation is not causal impact.
 
 These are analytical recommendations, not evidence of implemented operational improvements.
 
@@ -1778,9 +1783,9 @@ These are analytical recommendations, not evidence of implemented operational im
 - The primary forecasting grain is **month × total retail business**; results are not SKU-level, store-level, or inventory forecasts.
 - The 51 rolling-origin forecast cases contain overlapping calendar months and are **not 51 independent observations**.
 - The initial May–July 2017 holdout also appears in rolling-origin evaluation and is **not an untouched final test set**.
-- The seven models were compared and selected on the same historical backtest cases; the ranking is not an independent estimate of future performance.
+- The original seven models and two additional Ridge variants were assessed on the same historical rolling-origin backtest cases; rankings are not independent estimates of future performance.
 - Promotional activity is measured as promoted-item counts / presence, not discount rates, and correlations do not establish causation.
-- Forecasting models have not directly incorporated future-known promotional plans, holidays, pricing, or other external drivers.
+- Ridge models have incorporated forecast-origin-safe **historical** promotion features and advance-known calendar features, but have **not** incorporated confirmed future promotion plans, pricing, or other externally verified future drivers.
 - The raw data end on August 15, 2017; incomplete August is excluded from complete-month forecasting.
 - Operational deployment, automated monitoring, inventory optimization, and Power BI reporting remain future work.
 
@@ -2285,7 +2290,7 @@ The earlier eight seasonal-index feature-evaluation reports remain documented in
 
 ## Calendar & Promotion Feature Engineering — Feature Availability Audit
 
-**Status:** Completed — monthly reconciliation, promotion coverage investigation, feature availability classification, and CSV export validated. Calendar and promotion forecasting model development remains pending.
+**Status:** Completed — monthly reconciliation, promotion coverage investigation, feature availability classification, and CSV export validated. Subsequent feature engineering and Ridge forecasting evaluation are also complete (see sections below).
 
 ### Business Objective
 
@@ -2332,7 +2337,7 @@ A validated audit classified **10 features** according to their availability and
 - **Notebook:** [`03_calendar_promotion_feature_engineering.ipynb`](notebooks/05_forecasting/03_calendar_promotion_feature_engineering.ipynb)
 - **Validated report:** [`feature_availability_audit.csv`](reports/forecasting_feature_engineering/feature_availability_audit.csv) — **10 rows**, successfully exported and read back.
 
-### Next Steps
+### Original next steps (subsequently completed in Phase 6.2 and 6.3)
 
 1. Engineer advance-known calendar features and verify date/holiday availability.
 2. Engineer historical promotion features with origin-aware cutoffs and coverage safeguards.
@@ -2430,8 +2435,157 @@ The exported 51 evaluation cases must not be used to train and evaluate a new mo
 
 **Calendar and historical promotion feature engineering: Completed and validated.**
 
-**Next stage:** Evaluate calendar and promotion features using leakage-safe rolling-origin forecasting and compare accuracy against the existing blended model benchmark (8.36% WAPE) and ETS Additive benchmark (8.48% WAPE).
+**Next stage (completed in Phase 6.3):** Calendar Only and Calendar + Promotion Ridge models were evaluated using leakage-safe rolling-origin forecasting against the blended benchmark (8.36% WAPE) and ETS Additive benchmark (8.48% WAPE). See the following section for results.
 
 Feature engineering alone does not establish that these variables improve forecast accuracy.
 
+## Phase 6.3 — Calendar & Promotion Ridge Forecast Model Evaluation
+
+**Status: Completed and validated locally; Git/GitHub synchronization pending.**
+
+**Notebook:** [`04_calendar_promotion_model_evaluation.ipynb`](notebooks/05_forecasting/04_calendar_promotion_model_evaluation.ipynb)
+
+**Method:** StandardScaler + Ridge Regression (`alpha=10.0`), refitted independently at each of 17 expanding forecast origins using only historical training examples. Calendar Only used eight predictors; Calendar + Promotion used eleven. Each model generated 51 predictions, with three horizons per origin. Training targets and predictors were restricted to information available by each origin. The same 51 cases were used to recompute the blended and ETS comparison metrics.
+
+**Validation:** 102 Ridge forecast records, 0 missing/nonfinite/negative predictions, 0 actual-sales reconciliation difference, and 51 identical matched cases per model. Exported reports were reloaded and validated (102 / 4 / 17 rows).
+
+### Final Model Evaluation and Business Interpretation
+
+### 1. Business Objective
+
+Evaluate whether advance-known calendar features and
+forecast-origin-safe historical promotion features improve
+monthly retail sales forecasting accuracy.
+
+The experiment uses 17 expanding rolling-origin windows,
+a three-month forecast horizon, and 51 matched forecast cases
+per model.
+
+### 2. Model Performance
+
+| Model | MAE | RMSE | WAPE | Bias |
+|---|---:|---:|---:|---:|
+| 50/50 Blended | 2,067,404.61 | 2,737,131.72 | 8.36% | -6.45% |
+| ETS Additive | 2,098,242.04 | 2,542,024.93 | 8.48% | +0.96% |
+| Calendar Only Ridge | 2,475,681.41 | 3,007,249.48 | 10.01% | -7.85% |
+| Calendar + Promotion Ridge | 3,028,155.12 | 3,789,357.27 | 12.24% | -1.34% |
+
+### 3. Key Findings
+
+**Finding 1 — Best model by WAPE**
+
+The 50/50 Blended benchmark achieved the lowest WAPE
+at 8.36%.
+
+ETS Additive achieved the lowest RMSE and the smallest
+absolute bias **among these four compared models**. Across the original seven-model benchmark, ETS Damped Trend has the smallest absolute aggregate bias (+0.30%).
+
+**Finding 2 — Calendar features**
+
+Calendar Only Ridge achieved 10.01% WAPE.
+
+It did not outperform the existing blended or ETS
+benchmarks.
+
+**Finding 3 — Promotion features**
+
+Adding historical promotion features increased Ridge
+WAPE from 10.01% to 12.24%.
+
+However, the promotion-enhanced model reduced the
+magnitude of overall negative forecast bias.
+
+**Finding 4 — Error distribution**
+
+Promotion features improved 30 of 51 individual forecast
+cases and 10 of 17 rolling-origin windows.
+
+Nevertheless, larger errors in other windows produced
+28,176,159.26 additional absolute-error units overall.
+
+**Finding 5 — Error concentration**
+
+The five largest deteriorating windows accounted for
+94.77% of total positive error deterioration.
+
+Four consecutive high-error origins occurred between
+April and July 2016.
+
+**Finding 6 — Historical promotion patterns**
+
+During April–July 2016, recorded promotion share increased
+from 29.41% to 40.91%.
+
+These changing historical promotion signals coincided
+with larger forecast errors, but this does not establish
+causation.
+
+### 3.1 Forecast-horizon diagnostic
+
+| Horizon | Calendar Only WAPE | Calendar + Promotion WAPE |
+|---|---:|---:|
+| 1 month | 10.45% | 11.70% |
+| 2 months | 9.96% | 12.18% |
+| 3 months | 9.61% | 12.83% |
+
+Calendar Only Ridge had lower WAPE at every horizon. The promotion model improved 10 of 17 forecast windows, but the five worst windows contributed 94.77% of total **positive** deterioration (54,261,670.07 absolute-error units). After offsetting improvements in other windows, the **net** additional absolute error was 28,176,159.26 across overlapping evaluation cases. These quantities are forecast-error units, **not realized financial losses**.
+
+### 4. Business Recommendation
+
+Retain the 50/50 Blended model as the current preferred
+candidate when minimizing WAPE is the primary objective.
+
+Consider ETS Additive when reducing large forecast errors
+or overall bias is more important.
+
+Do not replace the existing benchmarks with either Ridge
+model based on this experiment.
+
+Further model development should investigate more robust
+feature representations, model specifications, and
+independent validation periods.
+
+### 5. Limitations
+
+1. The dataset contains 55 complete historical months
+   from January 2013 through July 2017.
+
+2. The 51 evaluation cases arise from overlapping
+   rolling-origin forecasts and are not independent months.
+
+3. Historical promotion features describe recorded
+   promotion activity, not future promotion plans.
+
+4. The earliest 15 months have uncertain promotion
+   coverage and should not be interpreted as confirmed
+   zero-promotion months.
+
+5. Promotion-record share is not a discount percentage,
+   and promoted-item counts are not promotion rates.
+
+6. The Ridge models were evaluated with a fixed
+   regularization parameter and were not independently
+   optimized.
+
+7. The analysis establishes predictive performance,
+   not the causal effect of promotions on sales.
+
+8. The preferred model is a historical evaluation
+   candidate, not a production deployment approval.
+
+9. The same evaluation cases informed model comparisons and diagnostics; further tuning against these cases could overfit the backtest. An untouched later test period is not available in the present dataset.
+
+### 6. Reproducibility
+
+The following validated reports are available:
+
+- [`ridge_rolling_origin_forecasts.csv`](reports/forecasting_feature_evaluation/ridge_rolling_origin_forecasts.csv) — 102 predictions
+- [`four_model_accuracy_comparison.csv`](reports/forecasting_feature_evaluation/four_model_accuracy_comparison.csv) — 4 models
+- [`ridge_window_error_diagnostics.csv`](reports/forecasting_feature_evaluation/ridge_window_error_diagnostics.csv) — 17 origins
+
+All Ridge predictions were generated using historical
+training information available at their forecast origins.
+
 ---
+
+
